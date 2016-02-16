@@ -24,7 +24,6 @@
 //! Dependency: [jegp 2.0.0](https://github.com/johelegp/jegp)
 #include <jegp/String_view.hpp>
 
-
 // On MSVC, disable "conditional expression is constant" warning (level 4).
 // This warning is almost impossible to avoid with certain types of templated code
 #ifdef _MSC_VER
