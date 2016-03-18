@@ -18,8 +18,8 @@ namespace rapidxml
 
     public:
 
-        typedef xml_node<Ch> value_type;
-        typedef xml_node<Ch> &reference;
+        typedef xml_node<Ch> *value_type;
+        typedef xml_node<Ch> *reference;
         typedef xml_node<Ch> *pointer;
         typedef std::ptrdiff_t difference_type;
         typedef std::bidirectional_iterator_tag iterator_category;
@@ -37,7 +37,7 @@ namespace rapidxml
         reference operator *() const
         {
             assert(m_node);
-            return *m_node;
+            return m_node;
         }
 
         pointer operator->() const
@@ -97,8 +97,8 @@ namespace rapidxml
 
     public:
 
-        typedef xml_attribute<Ch> value_type;
-        typedef xml_attribute<Ch> &reference;
+        typedef xml_attribute<Ch> *value_type;
+        typedef xml_attribute<Ch> *reference;
         typedef xml_attribute<Ch> *pointer;
         typedef std::ptrdiff_t difference_type;
         typedef std::bidirectional_iterator_tag iterator_category;
@@ -116,7 +116,7 @@ namespace rapidxml
         reference operator *() const
         {
             assert(m_attribute);
-            return *m_attribute;
+            return m_attribute;
         }
 
         pointer operator->() const
