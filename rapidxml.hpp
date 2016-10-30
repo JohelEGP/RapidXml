@@ -13,6 +13,8 @@
     #include <new>          // For placement new
 #endif
 
+#include <type_traits>
+
 //! \class jegp::String_view
 //! \headerfile jegp/String_view.hpp <jegp/String_view.hpp>
 //! Dependency: [jegp 1.2.0](https://github.com/johelegp/jegp)
@@ -142,6 +144,40 @@ namespace rapidxml
     template<class Ch> class xml_node;
     template<class Ch> class xml_attribute;
     template<class Ch> class xml_document;
+
+    //! Policy type for case sensitivity in comparisons.
+    struct case_sensitive_policy
+    {
+        //! \cond internal
+        struct True { };
+        struct False { };
+
+        explicit constexpr case_sensitive_policy(True) noexcept
+          : value{true}
+        {
+        }
+
+        explicit constexpr case_sensitive_policy(False) noexcept
+          : value{false}
+        {
+        }
+
+        template <class T, class = std::enable_if_t<std::is_same_v<T,bool>>>
+        constexpr operator T() const noexcept
+        {
+            return value;
+        }
+
+        bool value;
+        //! \endcond
+    };
+
+    //! Can be used in place of and is equivalent to a <code>true case_sensitive</code> argument.
+    //!
+    constexpr case_sensitive_policy     case_sensitive {case_sensitive_policy::True{}};
+    //! Can be used in place of and is equivalent to a <code>false case_sensitive</code> argument.
+    //!
+    constexpr case_sensitive_policy non_case_sensitive {case_sensitive_policy::False{}};
 
     //! Enumeration listing all node types produced by the parser.
     //! Use xml_node::type() function to query node type.
@@ -901,10 +937,11 @@ namespace rapidxml
                 return this->m_parent ? m_prev_attribute : 0;
         }
 
-        //! \return `previous_attribute(name.empty() ? nullptr : name.data(),name.size(),case_sensitive)`
-        xml_attribute<Ch> *previous_attribute(std::experimental::basic_string_view<Ch> name, bool case_sensitive = true) const noexcept
+        //! \return `previous_attribute(name.empty() ? nullptr : name.data(),name.size(),cs)`
+        xml_attribute<Ch> *previous_attribute(std::experimental::basic_string_view<Ch> name, case_sensitive_policy cs = case_sensitive) const noexcept
+
         {
-            return previous_attribute(name.empty() ? nullptr : name.data(),name.size(),case_sensitive);
+            return previous_attribute(name.empty() ? nullptr : name.data(),name.size(),cs);
         }
 
         //! Gets next attribute, optionally matching attribute name.
@@ -927,10 +964,11 @@ namespace rapidxml
                 return this->m_parent ? m_next_attribute : 0;
         }
 
-        //! \return `next_attribute(name.empty() ? nullptr : name.data(),name.size(),case_sensitive)`
-        xml_attribute<Ch> *next_attribute(std::experimental::basic_string_view<Ch> name, bool case_sensitive = true) const noexcept
+        //! \return `next_attribute(name.empty() ? nullptr : name.data(),name.size(),cs)`
+        xml_attribute<Ch> *next_attribute(std::experimental::basic_string_view<Ch> name, case_sensitive_policy cs = case_sensitive) const noexcept
+
         {
-            return next_attribute(name.empty() ? nullptr : name.data(),name.size(),case_sensitive);
+            return next_attribute(name.empty() ? nullptr : name.data(),name.size(),cs);
         }
 
     private:
@@ -1013,10 +1051,11 @@ namespace rapidxml
                 return m_first_node;
         }
 
-        //! \return `first_node(name.empty() ? nullptr : name.data(),name.size(),case_sensitive)`
-        xml_node<Ch> *first_node(std::experimental::basic_string_view<Ch> name, bool case_sensitive = true) const noexcept
+        //! \return `first_node(name.empty() ? nullptr : name.data(),name.size(),cs)`
+        xml_node<Ch> *first_node(std::experimental::basic_string_view<Ch> name, case_sensitive_policy cs = case_sensitive) const noexcept
+
         {
-            return first_node(name.empty() ? nullptr : name.data(),name.size(),case_sensitive);
+            return first_node(name.empty() ? nullptr : name.data(),name.size(),cs);
         }
 
         //! Gets last child node, optionally matching node name.
@@ -1042,10 +1081,11 @@ namespace rapidxml
                 return m_last_node;
         }
 
-        //! \return `last_node(name.empty() ? nullptr : name.data(),name.size(),case_sensitive)`
-        xml_node<Ch> *last_node(std::experimental::basic_string_view<Ch> name, bool case_sensitive = true) const noexcept
+        //! \return `last_node(name.empty() ? nullptr : name.data(),name.size(),cs)`
+        xml_node<Ch> *last_node(std::experimental::basic_string_view<Ch> name, case_sensitive_policy cs = case_sensitive) const noexcept
+
         {
-            return last_node(name.empty() ? nullptr : name.data(),name.size(),case_sensitive);
+            return last_node(name.empty() ? nullptr : name.data(),name.size(),cs);
         }
 
         //! Gets previous sibling node, optionally matching node name.
@@ -1071,10 +1111,11 @@ namespace rapidxml
                 return m_prev_sibling;
         }
 
-        //! \return `previous_sibling(name.empty() ? nullptr : name.data(),name.size(),case_sensitive)`
-        xml_node<Ch> *previous_sibling(std::experimental::basic_string_view<Ch> name, bool case_sensitive = true) const noexcept
+        //! \return `previous_sibling(name.empty() ? nullptr : name.data(),name.size(),cs)`
+        xml_node<Ch> *previous_sibling(std::experimental::basic_string_view<Ch> name, case_sensitive_policy cs = case_sensitive) const noexcept
+
         {
-            return previous_sibling(name.empty() ? nullptr : name.data(),name.size(),case_sensitive);
+            return previous_sibling(name.empty() ? nullptr : name.data(),name.size(),cs);
         }
 
         //! Gets next sibling node, optionally matching node name.
@@ -1100,10 +1141,11 @@ namespace rapidxml
                 return m_next_sibling;
         }
 
-        //! \return `next_sibling(name.empty() ? nullptr : name.data(),name.size(),case_sensitive)`
-        xml_node<Ch> *next_sibling(std::experimental::basic_string_view<Ch> name, bool case_sensitive = true) const noexcept
+        //! \return `next_sibling(name.empty() ? nullptr : name.data(),name.size(),cs)`
+        xml_node<Ch> *next_sibling(std::experimental::basic_string_view<Ch> name, case_sensitive_policy cs = case_sensitive) const noexcept
+
         {
-            return next_sibling(name.empty() ? nullptr : name.data(),name.size(),case_sensitive);
+            return next_sibling(name.empty() ? nullptr : name.data(),name.size(),cs);
         }
 
         //! Gets first attribute of node, optionally matching attribute name.
@@ -1126,10 +1168,11 @@ namespace rapidxml
                 return m_first_attribute;
         }
 
-        //! \return `first_attribute(name.empty() ? nullptr : name.data(),name.size(),case_sensitive)`
-        xml_attribute<Ch> *first_attribute(std::experimental::basic_string_view<Ch> name, bool case_sensitive = true) const noexcept
+        //! \return `first_attribute(name.empty() ? nullptr : name.data(),name.size(),cs)`
+        xml_attribute<Ch> *first_attribute(std::experimental::basic_string_view<Ch> name, case_sensitive_policy cs = case_sensitive) const noexcept
+
         {
-            return first_attribute(name.empty() ? nullptr : name.data(),name.size(),case_sensitive);
+            return first_attribute(name.empty() ? nullptr : name.data(),name.size(),cs);
         }
 
         //! Gets last attribute of node, optionally matching attribute name.
@@ -1152,10 +1195,11 @@ namespace rapidxml
                 return m_first_attribute ? m_last_attribute : 0;
         }
 
-        //! \return `last_attribute(name.empty() ? nullptr : name.data(),name.size(),case_sensitive)`
-        xml_attribute<Ch> *last_attribute(std::experimental::basic_string_view<Ch> name, bool case_sensitive = true) const noexcept
+        //! \return `last_attribute(name.empty() ? nullptr : name.data(),name.size(),cs)`
+        xml_attribute<Ch> *last_attribute(std::experimental::basic_string_view<Ch> name, case_sensitive_policy cs = case_sensitive) const noexcept
+
         {
-            return last_attribute(name.empty() ? nullptr : name.data(),name.size(),case_sensitive);
+            return last_attribute(name.empty() ? nullptr : name.data(),name.size(),cs);
         }
 
         ///////////////////////////////////////////////////////////////////////////
