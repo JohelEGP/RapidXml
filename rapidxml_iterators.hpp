@@ -12,15 +12,15 @@ namespace rapidxml
 {
 
     //! Iterator of child nodes of xml_node
-    template<class Ch>
+    template<class Ch = char>
     class node_iterator
     {
 
     public:
 
-        typedef typename xml_node<Ch> value_type;
-        typedef typename xml_node<Ch> &reference;
-        typedef typename xml_node<Ch> *pointer;
+        typedef xml_node<Ch> value_type;
+        typedef xml_node<Ch> &reference;
+        typedef xml_node<Ch> *pointer;
         typedef std::ptrdiff_t difference_type;
         typedef std::bidirectional_iterator_tag iterator_category;
 
@@ -56,7 +56,7 @@ namespace rapidxml
         node_iterator operator++(int)
         {
             node_iterator tmp = *this;
-            ++this;
+            this->operator++();
             return tmp;
         }
 
@@ -70,7 +70,7 @@ namespace rapidxml
         node_iterator operator--(int)
         {
             node_iterator tmp = *this;
-            ++this;
+            this->operator--();
             return tmp;
         }
 
@@ -91,15 +91,15 @@ namespace rapidxml
     };
 
     //! Iterator of child attributes of xml_node
-    template<class Ch>
+    template<class Ch = char>
     class attribute_iterator
     {
 
     public:
 
-        typedef typename xml_attribute<Ch> value_type;
-        typedef typename xml_attribute<Ch> &reference;
-        typedef typename xml_attribute<Ch> *pointer;
+        typedef xml_attribute<Ch> value_type;
+        typedef xml_attribute<Ch> &reference;
+        typedef xml_attribute<Ch> *pointer;
         typedef std::ptrdiff_t difference_type;
         typedef std::bidirectional_iterator_tag iterator_category;
 
@@ -135,7 +135,7 @@ namespace rapidxml
         attribute_iterator operator++(int)
         {
             attribute_iterator tmp = *this;
-            ++this;
+            this->operator++();
             return tmp;
         }
 
@@ -149,7 +149,7 @@ namespace rapidxml
         attribute_iterator operator--(int)
         {
             attribute_iterator tmp = *this;
-            ++this;
+            this->operator--();
             return tmp;
         }
 
