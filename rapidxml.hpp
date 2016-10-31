@@ -529,7 +529,7 @@ namespace rapidxml
         //! \param source String to initialize the allocated memory with, or 0 to not initialize it.
         //! \param size Number of characters to allocate, or zero to calculate it automatically from source string length; if size is 0, source string must be specified and null terminated.
         //! \return Pointer to allocated char array. This pointer will never be NULL.
-        Ch *allocate_string(const Ch *source = 0, std::size_t size = 0)
+        Ch *allocate_string(const Ch *source, std::size_t size = 0)
         {
             assert(source || size);     // Either source or size (or both) must be specified
             if (size == 0)
