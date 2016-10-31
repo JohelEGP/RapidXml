@@ -10,12 +10,14 @@ Project to improve and modernize the [RapidXml 1.13](http://rapidxml.sourceforge
     - Technical Specifications
         + Library Fundamentals
             * `<experimental/string_view>`
+* C++17 range-based for loop
 
 ## Features
 
 * [String view support](#string-view-support)
 * [Policy type for case sensitivity](#policy-type-for-case-sensitivity)
 * Convenience `xml_document::parse` overload for constant XML strings.
+* [Ranges of node children and attributes](#ranges-of-node-children-and-attributes)
 
 ### String view support
 
@@ -42,6 +44,26 @@ constexpr case_sensitive_policy non_case_sensitive {/*unspecified*/};
 ```
 
 These constants can also be used in place of the `bool case_sensitive` parameters.
+
+### Ranges of node children and attributes
+
+```C++
+// In header <rapidxml_iterators.hpp>
+
+//...
+
+template<class Ch>
+/*unspecified*/ node_range(const xml_node<Ch> *parent,
+                           std::experimental::basic_string_view<Ch> name = {}) noexcept;
+
+template<class Ch>
+/*unspecified*/ attribute_range(const xml_node<Ch> *node,
+                                std::experimental::basic_string_view<Ch> name = {}) noexcept;
+```
+
+The functions return a range of pointers to the children/attributes of the node, optionally filtered by `name`.
+
+The ranges offers minimal range-based for loop support.
 
 ## Possible future work
 

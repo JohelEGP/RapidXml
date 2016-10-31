@@ -169,6 +169,104 @@ namespace rapidxml
 
     };
 
+    //! \cond internal
+    namespace internal
+    {
+        // Range support for children of xml_node.
+
+        struct node_end { };
+
+        template<class Ch>
+        struct node_begin
+        {
+            bool operator !=(node_end) const noexcept
+            {
+                return child;
+            }
+
+            auto operator *() const noexcept
+            {
+                return child;
+            }
+
+            void operator++() noexcept
+            {
+                child = child->next_sibling(name);
+            }
+
+            xml_node<Ch> *child;
+            std::experimental::basic_string_view<Ch> name;
+        };
+
+        template<class Ch>
+        struct node_range
+        {
+            node_begin<Ch> begin_;
+
+            auto end() { return node_end{}; }
+            auto begin() { return begin_; }
+        };
+
+        // Range support for attributes of xml_node.
+
+        struct attribute_end { };
+
+        template<class Ch>
+        struct attribute_begin
+        {
+            bool operator !=(attribute_end) const noexcept
+            {
+                return attribute;
+            }
+
+            auto operator *() const noexcept
+            {
+                return attribute;
+            }
+
+            void operator++() noexcept
+            {
+                attribute = attribute->next_attribute(name);
+            }
+
+            xml_attribute<Ch> *attribute;
+            std::experimental::basic_string_view<Ch> name;
+        };
+
+        template<class Ch>
+        struct attribute_range
+        {
+            attribute_begin<Ch> begin_;
+
+            auto end() { return attribute_end{}; }
+            auto begin() { return begin_; }
+        };
+
+    }
+    //! \endcond
+
+    //! \pre `parent` is not equal to `nullptr`.
+    //! \return A range of pointers to the children of `parent`, optionally filtered by `name`.
+    //! \param name Name of the children in the range. If empty, they are not filtered.
+    //! \remarks The range offers minimal range-based for loop support.
+    //! \remarks It is unspecified wether this function has a defaulted `name` or is overloaded.
+    template<class Ch>
+    auto node_range(const xml_node<Ch> *parent, std::experimental::basic_string_view<Ch> name = {}) noexcept
+    {
+        return internal::node_range<Ch>{{parent->first_node(),name}};
+    }
+
+    //! \pre `node` is not equal to `nullptr`.
+    //! \return A range of pointers to the attributes of `node`, optionally filtered by `name`.
+    //! \param name Name of the attributes in the range. If empty, they are not filtered.
+    //! \remarks The range offers minimal range-based for loop support.
+    //! \remarks It is unspecified wether this function has a defaulted `name` or is overloaded.
+    template<class Ch>
+    auto attribute_range(const xml_node<Ch> *node, std::experimental::basic_string_view<Ch> name = {}) noexcept
+    {
+        return internal::attribute_range<Ch>{{node->first_attribute(),name}};
+    }
+
 }
 
 #endif
