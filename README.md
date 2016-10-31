@@ -2,6 +2,8 @@
 
 Project to improve and modernize the [RapidXml 1.13](http://rapidxml.sourceforge.net/) public API.
 
+This project uses [Semantic Versioning 2.0.0](http://semver.org/).
+
 ## Dependencies
 
 * [jegp 1.2.0](https://github.com/johelegp/jegp)
