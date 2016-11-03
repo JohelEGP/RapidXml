@@ -13,7 +13,9 @@
     #include <new>          // For placement new
 #endif
 
+//! \cond
 #include <type_traits>
+//! \endcond
 
 //! \class jegp::String_view
 //! \headerfile jegp/String_view.hpp <jegp/String_view.hpp>
