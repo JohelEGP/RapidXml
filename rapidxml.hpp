@@ -148,9 +148,10 @@ namespace rapidxml
     template<class Ch> class xml_document;
 
     //! Policy type for case sensitivity in comparisons.
-    struct case_sensitive_policy
+    class case_sensitive_policy
     {
         //! \cond internal
+    public:
         struct True { };
         struct False { };
 
@@ -169,7 +170,7 @@ namespace rapidxml
         {
             return value;
         }
-
+    private:
         bool value;
         //! \endcond
     };

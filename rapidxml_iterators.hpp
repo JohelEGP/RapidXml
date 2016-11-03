@@ -169,6 +169,12 @@ namespace rapidxml
 
     };
 
+    template<class Ch>
+    auto node_range(const xml_node<Ch> *parent, std::experimental::basic_string_view<Ch> name = {}) noexcept;
+
+    template<class Ch>
+    auto attribute_range(const xml_node<Ch> *node, std::experimental::basic_string_view<Ch> name = {}) noexcept;
+
     //! \cond internal
     namespace internal
     {
@@ -177,8 +183,14 @@ namespace rapidxml
         struct node_end { };
 
         template<class Ch>
-        struct node_begin
+        class node_range;
+
+        template<class Ch>
+        class node_begin
         {
+
+        public:
+
             bool operator !=(node_end) const noexcept
             {
                 return child;
@@ -194,17 +206,30 @@ namespace rapidxml
                 child = child->next_sibling(name);
             }
 
+        private:
+
             xml_node<Ch> *child;
             std::experimental::basic_string_view<Ch> name;
+
+            friend class node_range<Ch>;
+
         };
 
         template<class Ch>
-        struct node_range
+        class node_range
         {
-            node_begin<Ch> begin_;
+
+        public:
 
             auto end() { return node_end{}; }
             auto begin() { return begin_; }
+
+        private:
+
+            node_begin<Ch> begin_;
+
+            friend auto rapidxml::node_range<Ch>(const xml_node<Ch> *, std::experimental::basic_string_view<Ch>) noexcept;
+
         };
 
         // Range support for attributes of xml_node.
@@ -212,8 +237,14 @@ namespace rapidxml
         struct attribute_end { };
 
         template<class Ch>
-        struct attribute_begin
+        class attribute_range;
+
+        template<class Ch>
+        class attribute_begin
         {
+
+        public:
+
             bool operator !=(attribute_end) const noexcept
             {
                 return attribute;
@@ -229,17 +260,30 @@ namespace rapidxml
                 attribute = attribute->next_attribute(name);
             }
 
+        private:
+
             xml_attribute<Ch> *attribute;
             std::experimental::basic_string_view<Ch> name;
+
+            friend class attribute_range<Ch>;
+
         };
 
         template<class Ch>
-        struct attribute_range
+        class attribute_range
         {
-            attribute_begin<Ch> begin_;
+
+        public:
 
             auto end() { return attribute_end{}; }
             auto begin() { return begin_; }
+
+        private:
+
+            attribute_begin<Ch> begin_;
+
+            friend auto rapidxml::attribute_range<Ch>(const xml_node<Ch> *, std::experimental::basic_string_view<Ch>) noexcept;
+
         };
 
     }
@@ -251,7 +295,7 @@ namespace rapidxml
     //! \remarks The range offers minimal range-based for loop support.
     //! \remarks It is unspecified wether this function has a defaulted `name` or is overloaded.
     template<class Ch>
-    auto node_range(const xml_node<Ch> *parent, std::experimental::basic_string_view<Ch> name = {}) noexcept
+    auto node_range(const xml_node<Ch> *parent, std::experimental::basic_string_view<Ch> name) noexcept
     {
         return internal::node_range<Ch>{{parent->first_node(),name}};
     }
@@ -262,7 +306,7 @@ namespace rapidxml
     //! \remarks The range offers minimal range-based for loop support.
     //! \remarks It is unspecified wether this function has a defaulted `name` or is overloaded.
     template<class Ch>
-    auto attribute_range(const xml_node<Ch> *node, std::experimental::basic_string_view<Ch> name = {}) noexcept
+    auto attribute_range(const xml_node<Ch> *node, std::experimental::basic_string_view<Ch> name) noexcept
     {
         return internal::attribute_range<Ch>{{node->first_attribute(),name}};
     }
