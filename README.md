@@ -12,7 +12,7 @@ This project uses [Semantic Versioning 2.0.0](http://semver.org/).
     - Technical Specifications
         + Library Fundamentals
             * `<experimental/string_view>`
-* C++17 range-based for loop
+* C++17 range-based for loop if the range is a node or attribute range.
 
 ## Features
 
