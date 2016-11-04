@@ -145,19 +145,19 @@ namespace rapidxml
     template<class Ch> class xml_document;
 
     //! Policy type for case sensitivity in comparisons.
-    class case_sensitive_policy
+    class case_sensitivity
     {
         //! \cond internal
     public:
         struct True { };
         struct False { };
 
-        explicit constexpr case_sensitive_policy(True) noexcept
+        explicit constexpr case_sensitivity(True) noexcept
           : value{true}
         {
         }
 
-        explicit constexpr case_sensitive_policy(False) noexcept
+        explicit constexpr case_sensitivity(False) noexcept
           : value{false}
         {
         }
@@ -174,10 +174,10 @@ namespace rapidxml
 
     //! Can be used in place of and is equivalent to a <code>true case_sensitive</code> argument.
     //!
-    constexpr case_sensitive_policy     case_sensitive {case_sensitive_policy::True{}};
+    constexpr case_sensitivity case_sensitive {case_sensitivity::True{}};
     //! Can be used in place of and is equivalent to a <code>false case_sensitive</code> argument.
     //!
-    constexpr case_sensitive_policy non_case_sensitive {case_sensitive_policy::False{}};
+    constexpr case_sensitivity non_case_sensitive {case_sensitivity::False{}};
 
     //! Enumeration listing all node types produced by the parser.
     //! Use xml_node::type() function to query node type.
@@ -935,7 +935,7 @@ namespace rapidxml
         }
 
         //! \return `previous_attribute(name.empty() ? nullptr : name.data(),name.size(),cs)`
-        xml_attribute<Ch> *previous_attribute(gsl::basic_string_span<const Ch> name, case_sensitive_policy cs = case_sensitive) const noexcept
+        xml_attribute<Ch> *previous_attribute(gsl::basic_string_span<const Ch> name, case_sensitivity cs = case_sensitive) const noexcept
 
         {
             return previous_attribute(name.empty() ? nullptr : name.data(),name.size(),cs);
@@ -962,7 +962,7 @@ namespace rapidxml
         }
 
         //! \return `next_attribute(name.empty() ? nullptr : name.data(),name.size(),cs)`
-        xml_attribute<Ch> *next_attribute(gsl::basic_string_span<const Ch> name, case_sensitive_policy cs = case_sensitive) const noexcept
+        xml_attribute<Ch> *next_attribute(gsl::basic_string_span<const Ch> name, case_sensitivity cs = case_sensitive) const noexcept
 
         {
             return next_attribute(name.empty() ? nullptr : name.data(),name.size(),cs);
@@ -1049,7 +1049,7 @@ namespace rapidxml
         }
 
         //! \return `first_node(name.empty() ? nullptr : name.data(),name.size(),cs)`
-        xml_node<Ch> *first_node(gsl::basic_string_span<const Ch> name, case_sensitive_policy cs = case_sensitive) const noexcept
+        xml_node<Ch> *first_node(gsl::basic_string_span<const Ch> name, case_sensitivity cs = case_sensitive) const noexcept
 
         {
             return first_node(name.empty() ? nullptr : name.data(),name.size(),cs);
@@ -1079,7 +1079,7 @@ namespace rapidxml
         }
 
         //! \return `last_node(name.empty() ? nullptr : name.data(),name.size(),cs)`
-        xml_node<Ch> *last_node(gsl::basic_string_span<const Ch> name, case_sensitive_policy cs = case_sensitive) const noexcept
+        xml_node<Ch> *last_node(gsl::basic_string_span<const Ch> name, case_sensitivity cs = case_sensitive) const noexcept
 
         {
             return last_node(name.empty() ? nullptr : name.data(),name.size(),cs);
@@ -1109,7 +1109,7 @@ namespace rapidxml
         }
 
         //! \return `previous_sibling(name.empty() ? nullptr : name.data(),name.size(),cs)`
-        xml_node<Ch> *previous_sibling(gsl::basic_string_span<const Ch> name, case_sensitive_policy cs = case_sensitive) const noexcept
+        xml_node<Ch> *previous_sibling(gsl::basic_string_span<const Ch> name, case_sensitivity cs = case_sensitive) const noexcept
 
         {
             return previous_sibling(name.empty() ? nullptr : name.data(),name.size(),cs);
@@ -1139,7 +1139,7 @@ namespace rapidxml
         }
 
         //! \return `next_sibling(name.empty() ? nullptr : name.data(),name.size(),cs)`
-        xml_node<Ch> *next_sibling(gsl::basic_string_span<const Ch> name, case_sensitive_policy cs = case_sensitive) const noexcept
+        xml_node<Ch> *next_sibling(gsl::basic_string_span<const Ch> name, case_sensitivity cs = case_sensitive) const noexcept
 
         {
             return next_sibling(name.empty() ? nullptr : name.data(),name.size(),cs);
@@ -1166,7 +1166,7 @@ namespace rapidxml
         }
 
         //! \return `first_attribute(name.empty() ? nullptr : name.data(),name.size(),cs)`
-        xml_attribute<Ch> *first_attribute(gsl::basic_string_span<const Ch> name, case_sensitive_policy cs = case_sensitive) const noexcept
+        xml_attribute<Ch> *first_attribute(gsl::basic_string_span<const Ch> name, case_sensitivity cs = case_sensitive) const noexcept
 
         {
             return first_attribute(name.empty() ? nullptr : name.data(),name.size(),cs);
@@ -1193,7 +1193,7 @@ namespace rapidxml
         }
 
         //! \return `last_attribute(name.empty() ? nullptr : name.data(),name.size(),cs)`
-        xml_attribute<Ch> *last_attribute(gsl::basic_string_span<const Ch> name, case_sensitive_policy cs = case_sensitive) const noexcept
+        xml_attribute<Ch> *last_attribute(gsl::basic_string_span<const Ch> name, case_sensitivity cs = case_sensitive) const noexcept
 
         {
             return last_attribute(name.empty() ? nullptr : name.data(),name.size(),cs);

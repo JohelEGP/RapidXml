@@ -24,18 +24,18 @@ For `xml_base`, the `name_span` and `value_span` member functions return a `gsl:
 
 ### Policy type for case sensitivity
 
-To request or not case sensitive comparisons, the `bool case_sensitive` parameters of the overloads with string span support have been replaced with a dedicated type, `case_sensitive_policy`.
+To request or not case sensitive comparisons, the `bool case_sensitive` parameters of the overloads with string span support have been replaced with a dedicated type, `case_sensitivity`.
 
 ```C++
 namespace rapidxml {
 
-struct case_sensitive_policy { /*unspecified*/ };
+struct case_sensitivity { /*unspecified*/ };
 
 // Requests that the comparisons are case sensitive (default).
-constexpr case_sensitive_policy case_sensitive {/*unspecified*/};
+constexpr case_sensitivity case_sensitive {/*unspecified*/};
 
 // Requests that the comparisons are not case sensitive.
-constexpr case_sensitive_policy non_case_sensitive {/*unspecified*/};
+constexpr case_sensitivity non_case_sensitive {/*unspecified*/};
 
 } // rapidxml namespace
 ```
@@ -74,7 +74,7 @@ The ranges offers minimal range-based for loop support.
     - Rename `name_span` and `value_span` to `name` and `value` respectively.
 * Replace pointer to T with reference to T when the pointer can never be `nullptr`.
     - Replace pointer to T with `std::experimental::optional<std::reference_wrapper<T>>`.
-* Replace `bool case_sensitive` parameters with [`case_sensitive_policy`](#policy-type-for-case-sensitivity).
+* Replace `bool case_sensitive` parameters with [`case_sensitivity`](#policy-type-for-case-sensitivity).
 * Change source code terminology.
     - Use element instead of node.
     - Use child/children when node(s) refers to them.
