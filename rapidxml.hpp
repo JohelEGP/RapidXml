@@ -848,7 +848,7 @@ namespace rapidxml
 
         //! Sets value of node to a zero-terminated string.
         //! See also \ref ownership_of_strings and xml_node::value(const Ch *, std::size_t).
-        //! \param value Vame of node to set. Must be zero terminated.
+        //! \param value Value of node to set. Must be zero terminated.
         void value(const Ch *value)
         {
             this->value(value, internal::measure(value));
@@ -897,7 +897,7 @@ namespace rapidxml
         ///////////////////////////////////////////////////////////////////////////
         // Construction & destruction
 
-        //! Constructs an empty attribute with the specified type.
+        //! Constructs an empty attribute.
         //! Consider using memory_pool of appropriate xml_document if allocating attributes manually.
         xml_attribute()
         {
