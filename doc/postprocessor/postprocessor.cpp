@@ -59,7 +59,7 @@ void add_to_toc(int level, xml_node<char> *title, xml_attribute<char> *id, bool 
         }
     }
     else
-        throw std::exception("Invalid TOC level");
+        throw std::runtime_error("Invalid TOC level");
     xml_node<char> *tocentry = doc.allocate_node(node_element, "a", fulltitle);
     char *link = doc.allocate_string(0, id->value_size() + 1);
     memcpy(link + 1, id->value(), id->value_size());
@@ -134,7 +134,7 @@ void process_contextless(xml_node<char> *node)
     else if (string(node->name()) == "toc")
     {
         if (toc.parent() != 0)
-            throw std::exception("More than one <toc> tag found.");
+            throw std::runtime_error("More than one <toc> tag found.");
         toc.name("toc-contents");
         node->append_node(&toc);
     }
