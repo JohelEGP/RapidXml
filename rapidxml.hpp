@@ -17,10 +17,7 @@
 #include <type_traits>
 //! \endcond
 
-//! \class jegp::String_view
-//! \headerfile jegp/String_view.hpp <jegp/String_view.hpp>
-//! Dependency: [jegp 1.2.0](https://github.com/johelegp/jegp)
-#include <jegp/String_view.hpp>
+#include <gsl/string_span>
 
 // On MSVC, disable "conditional expression is constant" warning (level 4).
 // This warning is almost impossible to avoid with certain types of templated code
@@ -480,9 +477,7 @@ namespace rapidxml
         }
 
         //! \return `allocate_node(type,name.empty() ? nullptr : name.data(),value.empty() ? nullptr : value.data(),name.size(),value.size())`
-        xml_node<Ch> *allocate_node(node_type type,
-                                    std::experimental::basic_string_view<Ch> name,
-                                    std::experimental::basic_string_view<Ch> value = {})
+        xml_node<Ch> *allocate_node(node_type type, gsl::basic_string_span<const Ch> name, gsl::basic_string_span<const Ch> value = {})
         {
             return allocate_node(type,name.empty() ? nullptr : name.data(),value.empty() ? nullptr : value.data(),name.size(),value.size());
         }
@@ -519,8 +514,7 @@ namespace rapidxml
         }
 
         //! \return `allocate_attribute(name.empty() ? nullptr : name.data(),value.empty() ? nullptr : value.data(),name.size(),value.size())`
-        xml_attribute<Ch> *allocate_attribute(std::experimental::basic_string_view<Ch> name,
-                                              std::experimental::basic_string_view<Ch> value = {})
+        xml_attribute<Ch> *allocate_attribute(gsl::basic_string_span<const Ch> name, gsl::basic_string_span<const Ch> value = {})
         {
             return allocate_attribute(name.empty() ? nullptr : name.data(),value.empty() ? nullptr : value.data(),name.size(),value.size());
         }
@@ -546,7 +540,7 @@ namespace rapidxml
 
         //! \pre source is not empty.
         //! \return `{allocate_string(source.empty() ? nullptr : source.data(),source.size()),source.size()}`
-        jegp::Basic_string_view<Ch> allocate_string(std::experimental::basic_string_view<Ch> source)
+        gsl::basic_string_span<Ch> allocate_string(gsl::basic_string_span<const Ch> source)
         {
             return {allocate_string(source.empty() ? nullptr : source.data(),source.size()),source.size()};
         }
@@ -750,7 +744,7 @@ namespace rapidxml
         }
 
         //! \return `{name(),name_size()}`
-        jegp::Basic_string_view<Ch> name_view() const noexcept
+        gsl::basic_string_span<Ch> name_view() const noexcept
         {
             return {name(),name_size()};
         }
@@ -775,7 +769,7 @@ namespace rapidxml
         }
 
         //! \return `{value(),value_size()}`
-        jegp::Basic_string_view<Ch> value_view() const noexcept
+        gsl::basic_string_span<Ch> value_view() const noexcept
         {
             return {value(),value_size()};
         }
@@ -804,7 +798,7 @@ namespace rapidxml
 
         //! Equivalent to `this->name(name.empty() ? nullptr : name.data(),name.size());`.
         //!
-        void name(std::experimental::basic_string_view<Ch> name) noexcept
+        void name(gsl::basic_string_span<const Ch> name) noexcept
         {
             this->name(name.empty() ? nullptr : name.data(),name.size());
         }
@@ -841,7 +835,7 @@ namespace rapidxml
 
         //! Equivalent to `this->value(value.empty() ? nullptr : value.data(),value.size());`.
         //!
-        void value(std::experimental::basic_string_view<Ch> value) noexcept
+        void value(gsl::basic_string_span<const Ch> value) noexcept
         {
             this->value(value.empty() ? nullptr : value.data(),value.size());
         }
@@ -941,7 +935,7 @@ namespace rapidxml
         }
 
         //! \return `previous_attribute(name.empty() ? nullptr : name.data(),name.size(),cs)`
-        xml_attribute<Ch> *previous_attribute(std::experimental::basic_string_view<Ch> name, case_sensitive_policy cs = case_sensitive) const noexcept
+        xml_attribute<Ch> *previous_attribute(gsl::basic_string_span<const Ch> name, case_sensitive_policy cs = case_sensitive) const noexcept
 
         {
             return previous_attribute(name.empty() ? nullptr : name.data(),name.size(),cs);
@@ -968,7 +962,7 @@ namespace rapidxml
         }
 
         //! \return `next_attribute(name.empty() ? nullptr : name.data(),name.size(),cs)`
-        xml_attribute<Ch> *next_attribute(std::experimental::basic_string_view<Ch> name, case_sensitive_policy cs = case_sensitive) const noexcept
+        xml_attribute<Ch> *next_attribute(gsl::basic_string_span<const Ch> name, case_sensitive_policy cs = case_sensitive) const noexcept
 
         {
             return next_attribute(name.empty() ? nullptr : name.data(),name.size(),cs);
@@ -1055,7 +1049,7 @@ namespace rapidxml
         }
 
         //! \return `first_node(name.empty() ? nullptr : name.data(),name.size(),cs)`
-        xml_node<Ch> *first_node(std::experimental::basic_string_view<Ch> name, case_sensitive_policy cs = case_sensitive) const noexcept
+        xml_node<Ch> *first_node(gsl::basic_string_span<const Ch> name, case_sensitive_policy cs = case_sensitive) const noexcept
 
         {
             return first_node(name.empty() ? nullptr : name.data(),name.size(),cs);
@@ -1085,7 +1079,7 @@ namespace rapidxml
         }
 
         //! \return `last_node(name.empty() ? nullptr : name.data(),name.size(),cs)`
-        xml_node<Ch> *last_node(std::experimental::basic_string_view<Ch> name, case_sensitive_policy cs = case_sensitive) const noexcept
+        xml_node<Ch> *last_node(gsl::basic_string_span<const Ch> name, case_sensitive_policy cs = case_sensitive) const noexcept
 
         {
             return last_node(name.empty() ? nullptr : name.data(),name.size(),cs);
@@ -1115,7 +1109,7 @@ namespace rapidxml
         }
 
         //! \return `previous_sibling(name.empty() ? nullptr : name.data(),name.size(),cs)`
-        xml_node<Ch> *previous_sibling(std::experimental::basic_string_view<Ch> name, case_sensitive_policy cs = case_sensitive) const noexcept
+        xml_node<Ch> *previous_sibling(gsl::basic_string_span<const Ch> name, case_sensitive_policy cs = case_sensitive) const noexcept
 
         {
             return previous_sibling(name.empty() ? nullptr : name.data(),name.size(),cs);
@@ -1145,7 +1139,7 @@ namespace rapidxml
         }
 
         //! \return `next_sibling(name.empty() ? nullptr : name.data(),name.size(),cs)`
-        xml_node<Ch> *next_sibling(std::experimental::basic_string_view<Ch> name, case_sensitive_policy cs = case_sensitive) const noexcept
+        xml_node<Ch> *next_sibling(gsl::basic_string_span<const Ch> name, case_sensitive_policy cs = case_sensitive) const noexcept
 
         {
             return next_sibling(name.empty() ? nullptr : name.data(),name.size(),cs);
@@ -1172,7 +1166,7 @@ namespace rapidxml
         }
 
         //! \return `first_attribute(name.empty() ? nullptr : name.data(),name.size(),cs)`
-        xml_attribute<Ch> *first_attribute(std::experimental::basic_string_view<Ch> name, case_sensitive_policy cs = case_sensitive) const noexcept
+        xml_attribute<Ch> *first_attribute(gsl::basic_string_span<const Ch> name, case_sensitive_policy cs = case_sensitive) const noexcept
 
         {
             return first_attribute(name.empty() ? nullptr : name.data(),name.size(),cs);
@@ -1199,7 +1193,7 @@ namespace rapidxml
         }
 
         //! \return `last_attribute(name.empty() ? nullptr : name.data(),name.size(),cs)`
-        xml_attribute<Ch> *last_attribute(std::experimental::basic_string_view<Ch> name, case_sensitive_policy cs = case_sensitive) const noexcept
+        xml_attribute<Ch> *last_attribute(gsl::basic_string_span<const Ch> name, case_sensitive_policy cs = case_sensitive) const noexcept
 
         {
             return last_attribute(name.empty() ? nullptr : name.data(),name.size(),cs);

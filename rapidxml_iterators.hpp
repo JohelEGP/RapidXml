@@ -170,10 +170,10 @@ namespace rapidxml
     };
 
     template<class Ch>
-    auto node_range(const xml_node<Ch> *parent, std::experimental::basic_string_view<Ch> name = {}) noexcept;
+    auto node_range(const xml_node<Ch> *parent, gsl::basic_string_span<const Ch> name = {}) noexcept;
 
     template<class Ch>
-    auto attribute_range(const xml_node<Ch> *node, std::experimental::basic_string_view<Ch> name = {}) noexcept;
+    auto attribute_range(const xml_node<Ch> *node, gsl::basic_string_span<const Ch> name = {}) noexcept;
 
     //! \cond internal
     namespace internal
@@ -209,7 +209,7 @@ namespace rapidxml
         private:
 
             xml_node<Ch> *child;
-            std::experimental::basic_string_view<Ch> name;
+            gsl::basic_string_span<const Ch> name;
 
             friend class node_range<Ch>;
 
@@ -228,7 +228,7 @@ namespace rapidxml
 
             node_begin<Ch> begin_;
 
-            friend auto rapidxml::node_range<Ch>(const xml_node<Ch> *, std::experimental::basic_string_view<Ch>) noexcept;
+            friend auto rapidxml::node_range<Ch>(const xml_node<Ch> *, gsl::basic_string_span<const Ch>) noexcept;
 
         };
 
@@ -263,7 +263,7 @@ namespace rapidxml
         private:
 
             xml_attribute<Ch> *attribute;
-            std::experimental::basic_string_view<Ch> name;
+            gsl::basic_string_span<const Ch> name;
 
             friend class attribute_range<Ch>;
 
@@ -282,7 +282,7 @@ namespace rapidxml
 
             attribute_begin<Ch> begin_;
 
-            friend auto rapidxml::attribute_range<Ch>(const xml_node<Ch> *, std::experimental::basic_string_view<Ch>) noexcept;
+            friend auto rapidxml::attribute_range<Ch>(const xml_node<Ch> *, gsl::basic_string_span<const Ch>) noexcept;
 
         };
 
@@ -295,7 +295,7 @@ namespace rapidxml
     //! \remarks The range offers minimal range-based for loop support.
     //! \remarks It is unspecified wether this function has a defaulted `name` or is overloaded.
     template<class Ch>
-    auto node_range(const xml_node<Ch> *parent, std::experimental::basic_string_view<Ch> name) noexcept
+    auto node_range(const xml_node<Ch> *parent, gsl::basic_string_span<const Ch> name) noexcept
     {
         return internal::node_range<Ch>{{parent->first_node(),name}};
     }
@@ -306,7 +306,7 @@ namespace rapidxml
     //! \remarks The range offers minimal range-based for loop support.
     //! \remarks It is unspecified wether this function has a defaulted `name` or is overloaded.
     template<class Ch>
-    auto attribute_range(const xml_node<Ch> *node, std::experimental::basic_string_view<Ch> name) noexcept
+    auto attribute_range(const xml_node<Ch> *node, gsl::basic_string_span<const Ch> name) noexcept
     {
         return internal::attribute_range<Ch>{{node->first_attribute(),name}};
     }
