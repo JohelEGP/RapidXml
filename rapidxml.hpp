@@ -744,7 +744,7 @@ namespace rapidxml
         }
 
         //! \return `{name(),name_size()}`
-        gsl::basic_string_span<Ch> name_view() const noexcept
+        gsl::basic_string_span<Ch> name_span() const noexcept
         {
             return {name(),name_size()};
         }
@@ -769,7 +769,7 @@ namespace rapidxml
         }
 
         //! \return `{value(),value_size()}`
-        gsl::basic_string_span<Ch> value_view() const noexcept
+        gsl::basic_string_span<Ch> value_span() const noexcept
         {
             return {value(),value_size()};
         }
