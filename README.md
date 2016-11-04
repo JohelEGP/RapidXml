@@ -23,6 +23,8 @@ This project uses [Semantic Versioning 2.0.0](http://semver.org/).
 
 ### String view support
 
+**Deprecated**: To be replaced with string span support.
+
 Wherever a RapidXml 1.13 member function has `const Ch*` and `std::size_t` parameter pairs representing string spans, there is an overload taking `std::experimental::basic_string_view<Ch>` parameters, which passes to the overloaded member function the `data()` and `size()` values of the string views through the string spans' components they represent. [ Note: An empty string view can have non-`nullptr` `data()`. RapidXml functions interpret the non-`nullptr` `const Ch*` value of a string span with `0` `std::size_t` value as a [`gsl::czstring`](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#SS-views) and, if needed, attempt to calculate its size. To match this meaning of emptiness, when a string view is empty, `nullptr` is passed instead of its `data()` to the overloaded member function. -- end note ]
 
 For `xml_base`, the `name_view` and `value_view` member functions return a mutable string view constructed with the string span components returned from the `name` and `name_size`, and `value` and `value_size` member functions respectively.
