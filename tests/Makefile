@@ -33,12 +33,12 @@ default:
 # build g++ debug mode
 build-g++-debug: CONFIG=g++-debug
 build-g++-debug: CC=g++
-build-g++-debug: COPTIONS=-g3 -O0 -Wall
+build-g++-debug: COPTIONS=-std=c++1z -g3 -O0 -Wall
 
 # build g++ release mode
 build-g++-release: CONFIG=g++-release
 build-g++-release: CC=g++
-build-g++-release: COPTIONS=-O3 -Wall -march=i686
+build-g++-release: COPTIONS=-std=c++1z -O3 -Wall -march=i686
 
 # build msvc debug mode
 build-msvc-debug: CONFIG=msvc-debug
