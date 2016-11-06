@@ -153,7 +153,10 @@ namespace rapidxml
     //! Policy type for case sensitivity in comparisons.
     class case_sensitivity
     {
-        //! \cond internal
+
+    //! \cond internal
+    public:
+
         struct True { };
         struct False { };
 
@@ -173,8 +176,10 @@ namespace rapidxml
             return value;
         }
 
+    private:
         bool value;
-        //! \endcond
+
+    //! \endcond
     };
 
     //! Can be used in place of and is equivalent to a <code>true case_sensitive</code> argument.
