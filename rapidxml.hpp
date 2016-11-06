@@ -151,7 +151,6 @@ namespace rapidxml
     class case_sensitivity
     {
         //! \cond internal
-    public:
         struct True { };
         struct False { };
 
@@ -170,7 +169,7 @@ namespace rapidxml
         {
             return value;
         }
-    private:
+
         bool value;
         //! \endcond
     };
