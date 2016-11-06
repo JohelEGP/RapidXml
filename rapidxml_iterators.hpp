@@ -179,32 +179,36 @@ namespace rapidxml
         template<class Ch>
         struct node_begin
         {
+
             bool operator !=(node_end) const noexcept
             {
-                return child;
+                return m_child;
             }
 
             auto operator *() const noexcept
             {
-                return child;
+                return m_child;
             }
 
             void operator++() noexcept
             {
-                child = child->next_sibling(name);
+                m_child = m_child->next_sibling(m_name);
             }
 
-            xml_node<Ch> *child;
-            std::experimental::basic_string_view<Ch> name;
+            xml_node<Ch> *m_child;
+            std::experimental::basic_string_view<Ch> m_name;
+
         };
 
         template<class Ch>
         struct node_range
         {
-            node_begin<Ch> begin_;
+
+            node_begin<Ch> m_begin;
 
             auto end() { return node_end{}; }
-            auto begin() { return begin_; }
+            auto begin() { return m_begin; }
+
         };
 
         // Range support for attributes of xml_node.
@@ -214,32 +218,36 @@ namespace rapidxml
         template<class Ch>
         struct attribute_begin
         {
+
             bool operator !=(attribute_end) const noexcept
             {
-                return attribute;
+                return m_attribute;
             }
 
             auto operator *() const noexcept
             {
-                return attribute;
+                return m_attribute;
             }
 
             void operator++() noexcept
             {
-                attribute = attribute->next_attribute(name);
+                m_attribute = m_attribute->next_attribute(m_name);
             }
 
-            xml_attribute<Ch> *attribute;
-            std::experimental::basic_string_view<Ch> name;
+            xml_attribute<Ch> *m_attribute;
+            std::experimental::basic_string_view<Ch> m_name;
+
         };
 
         template<class Ch>
         struct attribute_range
         {
-            attribute_begin<Ch> begin_;
+
+            attribute_begin<Ch> m_begin;
 
             auto end() { return attribute_end{}; }
-            auto begin() { return begin_; }
+            auto begin() { return m_begin; }
+
         };
 
     }
