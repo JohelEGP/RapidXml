@@ -801,11 +801,11 @@ namespace rapidxml
             m_name_size = size;
         }
 
-        //! Equivalent to `this->name(name.empty() ? nullptr : name.data(),name.size());`.
+        //! Equivalent to `this->name(name.data(),name.size());`.
         //!
         void name(std::basic_string_view<Ch> name) noexcept
         {
-            this->name(name.empty() ? nullptr : name.data(),name.size());
+            this->name(name.data(),name.size());
         }
 
         //! Sets name of node to a zero-terminated string.
@@ -838,11 +838,11 @@ namespace rapidxml
             m_value_size = size;
         }
 
-        //! Equivalent to `this->value(value.empty() ? nullptr : value.data(),value.size());`.
+        //! Equivalent to `this->value(value.data(),value.size());`.
         //!
         void value(std::basic_string_view<Ch> value) noexcept
         {
-            this->value(value.empty() ? nullptr : value.data(),value.size());
+            this->value(value.data(),value.size());
         }
 
         //! Sets value of node to a zero-terminated string.
