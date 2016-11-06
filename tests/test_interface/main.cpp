@@ -5,6 +5,24 @@
 using namespace std;
 using namespace rapidxml;
 
+[[maybe_unused]] void test_no_ambiguity_between_overloads()
+{
+    xml_document<char> doc;
+    const char* czs {"a"};
+
+    static_assert(is_same_v<decltype(doc.allocate_string({})),char*>);
+    static_assert(is_same_v<decltype(doc.allocate_string(czs)),char*>);
+
+    string_view sv;
+
+    static_assert(noexcept(doc.name(czs)) == noexcept(doc.name({})));
+    static_assert(noexcept(doc.name(czs)) != noexcept(doc.name(sv)));
+
+    static_assert(!is_convertible_v<std::size_t,case_sensitivity>);
+    static_assert(!is_convertible_v<case_sensitivity,std::size_t>);
+    static_assert( is_convertible_v<case_sensitivity,bool>);
+}
+
 void test_parent()
 {
     cout << "Test parent()...\n";
