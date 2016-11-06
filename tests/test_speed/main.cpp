@@ -2,7 +2,7 @@
 #include <vector>
 #include <cstdio>
 #include <cstring>
-#include <ctime>
+#include <chrono>
 #include <fstream>
 #include <iomanip>
 #include <stdexcept>
@@ -40,31 +40,6 @@ namespace rapidxml
         std::exit(1);
     }
 }
-
-///////////////////////////////////////////////////////////////////////////////
-// Timing, only works on x86, MSVC or gcc
-
-#if defined(_MSC_VER)
-
-    typedef __int64 tick_t;
-    inline tick_t ticks()
-    {
-        __asm __emit 0fh __asm __emit 031h   // RDTSC, result conveniently in EDX:EAX
-    }
-
-#elif defined(__GNUC__)
-
-    typedef long long tick_t;
-    inline tick_t ticks()
-    {
-        tick_t result;
-        __asm__ __volatile__ ("rdtsc" : "=A"(result));
-        return result;
-    }
-
-#else
-    #error "This test is only supported on MSVC or gcc, under x86"
-#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 // Parsers
@@ -146,22 +121,24 @@ void test(const char *filename, const char *description)
     // On 2 GHz CPU this is 1/4000 of a second.
     // During 2 seconds (taking into account restoring of the data), this file is parsed
     // several thousands of times.
-    tick_t min = 0;
-    clock_t start = std::clock();
-    while (std::clock() < start + 2 * CLOCKS_PER_SEC)   // 2 seconds
+    using namespace std::chrono;
+    using clock = high_resolution_clock;
+    auto min {clock::duration::max()};
+    auto end {clock::now() + 2s};
+    while (clock::now() < end)   // 2 seconds
     {
         buffer = data;     // Make a copy of data (this must be done every time because parsing destroys the data)
         Parser parser;     // Creation and destruction of parser not timed
         char *xml = &buffer.front();
-        tick_t t1 = ticks();    // 1st timing
+        auto t1 {clock::now()}; // 1st timing
         parser.parse(xml);
-        tick_t t2 = ticks();    // 2nd timing
-        if (min == 0 || t2 - t1 < min)
+        auto t2 {clock::now()}; // 2nd timing
+        if (t2 - t1 < min)
             min = t2 - t1;
     }
 
     // Return minimum cycles/character
-    cout <<  "        " << fixed << setprecision(1) << double(min) / size << " cycles/char " << description << "\n";
+    cout <<  "        " << fixed << setprecision(1) << double(min.count()) / size << " cycles/char " << description << "\n";
 
 }
 
