@@ -11,6 +11,7 @@ PROJECTS= \
 	test_no_exceptions \
 	test_nodes \
 	test_non_comparative \
+	test_ranges \
 	test_size \
 	test_speed \
 	test_wchar
