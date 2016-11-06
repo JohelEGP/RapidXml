@@ -1554,14 +1554,14 @@ namespace rapidxml
 
         }
 
-        //! Equivalent to `parse(const_cast<Ch*>(text))`.
+        //! Equivalent to `parse<Flags>(const_cast<Ch*>(text))`.
         //! \remarks The program is ill-formed unless `parse_non_destructive` is set in `Flags`.
         template<int Flags>
         void parse(const Ch *text)
         {
             static_assert((Flags & parse_non_destructive)==parse_non_destructive,
                 "Parsing a constant XML string requires setting the parse_non_destructive flag");
-            parse(const_cast<Ch*>(text));
+            parse<Flags>(const_cast<Ch*>(text));
         }
 
         //! Clears the document by deleting all nodes and clearing the memory pool.
