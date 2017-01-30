@@ -33,12 +33,12 @@ default:
 # build g++ debug mode
 build-g++-debug: CONFIG=g++-debug
 build-g++-debug: CC=g++
-build-g++-debug: COPTIONS=-std=c++1z -g3 -O0 -Wall
+build-g++-debug: COPTIONS=-std=c++17 -Wpedantic -Wall -Wextra -fmax-errors=3 -D_GLIBCXX_CONCEPT_CHECKS -O0
 
 # build g++ release mode
 build-g++-release: CONFIG=g++-release
 build-g++-release: CC=g++
-build-g++-release: COPTIONS=-std=c++1z -O3 -Wall -march=i686
+build-g++-release: COPTIONS=-std=c++17 -Wpedantic -Wall -Wextra -fmax-errors=3 -D_GLIBCXX_CONCEPT_CHECKS -O3
 
 # build msvc debug mode
 build-msvc-debug: CONFIG=msvc-debug
