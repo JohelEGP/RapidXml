@@ -18,6 +18,8 @@
 //! \endcond
 
 #include <string_view>
+#include <gsl/gsl>
+#include <gsl/string_span>
 
 //! \class jegp::Basic_string_ref
 //! \headerfile jegp/String_ref.hpp <jegp/String_ref.hpp>
@@ -492,7 +494,7 @@ namespace rapidxml
         }
 
         //! \return `allocate_node(type,name.empty() ? nullptr : name.data(),value.empty() ? nullptr : value.data(),name.size(),value.size())`
-        xml_node<Ch> *allocate_node(node_type type, std::basic_string_view<Ch> name, std::basic_string_view<Ch> value = {})
+        gsl::not_null<xml_node<Ch> *> allocate_node(node_type type, std::basic_string_view<Ch> name, std::basic_string_view<Ch> value = {})
         {
             return allocate_node(type, name.empty() ? nullptr : name.data(), value.empty() ? nullptr : value.data(), name.size(), value.size());
         }
@@ -529,7 +531,7 @@ namespace rapidxml
         }
 
         //! \return `allocate_attribute(name.empty() ? nullptr : name.data(),value.empty() ? nullptr : value.data(),name.size(),value.size())`
-        xml_attribute<Ch> *allocate_attribute(std::basic_string_view<Ch> name, std::basic_string_view<Ch> value = {})
+        gsl::not_null<xml_attribute<Ch> *> allocate_attribute(std::basic_string_view<Ch> name, std::basic_string_view<Ch> value = {})
         {
             return allocate_attribute(name.empty() ? nullptr : name.data(), value.empty() ? nullptr : value.data(), name.size(), value.size());
         }
@@ -1547,14 +1549,14 @@ namespace rapidxml
             }
         }
 
-        //! Equivalent to `parse<Flags>(const_cast<Ch*>(text))`.
+        //! Equivalent to `parse<Flags>(const_cast<Ch*>(text.get()))`.
         //! \remarks The program is ill-formed unless `parse_non_destructive` is set in `Flags`.
         template<int Flags>
-        void parse(const Ch *text)
+        void parse(gsl::not_null<gsl::basic_zstring<const Ch>> text)
         {
             static_assert((Flags & parse_non_destructive) == parse_non_destructive,
                           "Parsing a constant XML string requires setting the parse_non_destructive flag");
-            parse<Flags>(const_cast<Ch *>(text));
+            parse<Flags>(const_cast<Ch *>(text.get()));
         }
 
         //! Clears the document by deleting all nodes and clearing the memory pool.
