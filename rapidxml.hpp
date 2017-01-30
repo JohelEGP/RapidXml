@@ -19,10 +19,10 @@
 
 #include <string_view>
 
-//! \class jegp::Basic_string_view
-//! \headerfile jegp/String_view.hpp <jegp/String_view.hpp>
-//! Dependency: [jegp 2.0.0](https://github.com/johelegp/jegp)
-#include <jegp/String_view.hpp>
+//! \class jegp::Basic_string_ref
+//! \headerfile jegp/String_ref.hpp <jegp/String_ref.hpp>
+//! Dependency: [jegp 3.0.0](https://github.com/johelegp/jegp)
+#include <jegp/String_ref.hpp>
 
 // On MSVC, disable "conditional expression is constant" warning (level 4).
 // This warning is almost impossible to avoid with certain types of templated code
@@ -555,7 +555,7 @@ namespace rapidxml
 
         //! \pre source is not empty.
         //! \return `{allocate_string(source.empty() ? nullptr : source.data(),source.size()),source.size()}`
-        jegp::Basic_string_view<Ch> allocate_string(std::basic_string_view<Ch> source)
+        jegp::Basic_string_ref<Ch> allocate_string(std::basic_string_view<Ch> source)
         {
             return {allocate_string(source.empty() ? nullptr : source.data(), source.size()), source.size()};
         }
@@ -757,7 +757,7 @@ namespace rapidxml
         }
 
         //! \return `{name(),name_size()}`
-        jegp::Basic_string_view<Ch> name_view() const noexcept
+        jegp::Basic_string_ref<Ch> name_ref() const noexcept
         {
             return {name(), name_size()};
         }
@@ -782,7 +782,7 @@ namespace rapidxml
         }
 
         //! \return `{value(),value_size()}`
-        jegp::Basic_string_view<Ch> value_view() const noexcept
+        jegp::Basic_string_ref<Ch> value_ref() const noexcept
         {
             return {value(), value_size()};
         }

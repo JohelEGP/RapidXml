@@ -6,26 +6,23 @@ This project uses [Semantic Versioning 2.0.0](http://semver.org/).
 
 ## Dependencies
 
-* [jegp 2.0.0](https://github.com/johelegp/jegp)
-    - Partial C++17 support
-        + Variable type traits
-        + `<string_view>`
+* [jegp 3.0.0](https://github.com/johelegp/jegp)
 * C++17 range-based for loop if the range is a node or attribute range.
 
 ## Features
 
-* [String view support](#string-view-support)
+* [String view/ref support](#string-viewref-support)
 * [Policy type for case sensitivity](#policy-type-for-case-sensitivity)
 * Convenience `xml_document::parse` overload for constant XML strings.
 * [Ranges of node children and attributes](#ranges-of-node-children-and-attributes)
 
-### String view support
+### String view/ref support
 
 Wherever a RapidXml 1.13 member function has `const Ch*` and `std::size_t` parameter pairs representing string spans, there is an overload taking `std::basic_string_view<Ch>` parameters, which passes to the overloaded member function the `data()` and `size()` values of the string views through the string spans' components they represent. [ Note: An empty string view can have non-`nullptr` `data()`. Some overloaded member functions interpret the non-`nullptr` `const Ch*` value of a string span with `0` `std::size_t` value as a [`gsl::czstring`](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#SS-views) and attempt to calculate its size. To match this meaning of emptiness, when a string view is empty, `nullptr` is passed instead of its `data()` to those overloaded member functions. -- end note ]
 
-The `memory_pool::allocate_string` overload returns a mutable string view.
+The `memory_pool::allocate_string` overload returns a `jegp::Basic_string_ref<Ch>`.
 
-For `xml_base`, the `name_view` and `value_view` member functions return a mutable string view constructed with the string span components returned from the `name` and `name_size`, and `value` and `value_size` member functions respectively.
+For `xml_base`, the `name_ref` and `value_ref` member functions return a `jegp::Basic_string_ref<Ch>` constructed with the string span components returned from the `name` and `name_size`, and `value` and `value_size` member functions respectively.
 
 ### Policy type for case sensitivity
 

@@ -28,13 +28,13 @@ int main()
 
     for (auto child : node_range(&doc))
     {
-        CHECK(*elem_name_it++ == child->name_view());
-        CHECK(*elem_value_it++ == child->value_view());
+        CHECK(*elem_name_it++ == child->name_ref());
+        CHECK(*elem_value_it++ == child->value_ref());
 
         for (auto attr : attribute_range(child))
         {
-            CHECK(*attr_name_it++ == attr->name_view());
-            CHECK(*attr_value_it++ == attr->value_view());
+            CHECK(*attr_name_it++ == attr->name_ref());
+            CHECK(*attr_value_it++ == attr->value_ref());
         }
     }
 
