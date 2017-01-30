@@ -2455,6 +2455,7 @@ namespace rapidxml
     //! \cond internal
     namespace internal
     {
+        // clang-format off
 
         // Whitespace (space \n \r \t)
         template<int Dummy>
@@ -2733,6 +2734,7 @@ namespace rapidxml
            224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,  // E
            240,241,242,243,244,245,246,247,248,249,250,251,252,253,254,255   // F
         };
+        // clang-format on
     }
     //! \endcond
 

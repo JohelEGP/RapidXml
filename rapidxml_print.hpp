@@ -56,6 +56,7 @@ namespace rapidxml
                 {
                     switch (*begin)
                     {
+                    // clang-format off
                     case Ch('<'):
                         *out++ = Ch('&'); *out++ = Ch('l'); *out++ = Ch('t'); *out++ = Ch(';');
                         break;
@@ -73,6 +74,7 @@ namespace rapidxml
                         break;
                     default:
                         *out++ = *begin;    // No expansion, copy character
+                    // clang-format on
                     }
                 }
                 ++begin;    // Step to next character
@@ -238,6 +240,7 @@ namespace rapidxml
             assert(node->type() == node_cdata);
             if (!(flags & print_no_indenting))
                 out = fill_chars(out, indent, Ch('\t'));
+            // clang-format off
             *out = Ch('<'); ++out;
             *out = Ch('!'); ++out;
             *out = Ch('['); ++out;
@@ -251,6 +254,7 @@ namespace rapidxml
             *out = Ch(']'); ++out;
             *out = Ch(']'); ++out;
             *out = Ch('>'); ++out;
+            // clang-format on
             return out;
         }
 
