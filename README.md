@@ -66,20 +66,3 @@ template<class Ch>
 The functions return a range of pointers to the children/attributes of the node, optionally filtered by `name`.
 
 The ranges offers minimal range-based for loop support.
-
-## Possible future work
-
-### Backwards compatible changes
-
-* Use the [Guideline support library](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-gsl).
-
-### Breaking changes
-
-* In support of a vocabulary typed interface without the old ways as alternative, deprecate and remove member functions in favour of those with string view support.
-    - Rename `name_view` and `value_view` to `name` and `value` respectively.
-* Replace pointer to T with reference to T when the pointer can never be `nullptr`.
-    - Replace pointer to T with `std::optional<std::reference_wrapper<T>>`.
-* Replace `bool case_sensitive` parameters with [`case_sensitivity`](#policy-type-for-case-sensitivity).
-* Change source code terminology.
-    - Use element instead of node.
-    - Use child/children when node(s) refers to them.
