@@ -10,8 +10,8 @@
 
 // Only include streams if not disabled
 #ifndef RAPIDXML_NO_STREAMS
-    #include <ostream>
-    #include <iterator>
+#include <iterator>
+#include <ostream>
 #endif
 
 namespace rapidxml
@@ -50,7 +50,7 @@ namespace rapidxml
             {
                 if (*begin == noexpand)
                 {
-                    *out++ = *begin;    // No expansion, copy character
+                    *out++ = *begin;   // No expansion, copy character
                 }
                 else
                 {
@@ -74,10 +74,10 @@ namespace rapidxml
                         break;
                     default:
                         *out++ = *begin;    // No expansion, copy character
-                    // clang-format on
+                        // clang-format on
                     }
                 }
-                ++begin;    // Step to next character
+                ++begin;   // Step to next character
             }
             return out;
         }
@@ -169,7 +169,7 @@ namespace rapidxml
                 out = print_pi_node(out, node, flags, indent);
                 break;
 
-                // Unknown
+            // Unknown
             default:
                 assert(0);
                 break;
@@ -393,7 +393,6 @@ namespace rapidxml
             *out = Ch('>'), ++out;
             return out;
         }
-
     }
     //! \endcond
 
@@ -430,13 +429,12 @@ namespace rapidxml
     //! \param node Node to be printed.
     //! \return Output stream.
     template<class Ch>
-    inline std::basic_ostream<Ch> &operator <<(std::basic_ostream<Ch> &out, const xml_node<Ch> &node)
+    inline std::basic_ostream<Ch> &operator<<(std::basic_ostream<Ch> &out, const xml_node<Ch> &node)
     {
         return print(out, node);
     }
 
 #endif
-
 }
 
 #endif

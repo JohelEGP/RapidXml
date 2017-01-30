@@ -7,11 +7,11 @@
 //! \file rapidxml_utils.hpp This file contains high-level rapidxml utilities that can be useful
 //! in certain simple scenarios. They should probably not be used if maximizing performance is the main objective.
 
-#include "rapidxml.hpp"
-#include <vector>
-#include <string>
 #include <fstream>
 #include <stdexcept>
+#include <string>
+#include <vector>
+#include "rapidxml.hpp"
 
 namespace rapidxml
 {
@@ -22,7 +22,6 @@ namespace rapidxml
     {
 
     public:
-
         //! Loads file into the memory. Data will be automatically destroyed by the destructor.
         //! \param filename Filename to load.
         file(const char *filename)
@@ -82,9 +81,7 @@ namespace rapidxml
         }
 
     private:
-
         std::vector<Ch> m_data;   // File data
-
     };
 
     //! Counts children of node. Time complexity is O(n).
@@ -116,7 +113,6 @@ namespace rapidxml
         }
         return count;
     }
-
 }
 
 #endif

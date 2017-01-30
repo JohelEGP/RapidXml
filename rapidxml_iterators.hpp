@@ -17,7 +17,6 @@ namespace rapidxml
     {
 
     public:
-
         typedef xml_node<Ch> *value_type;
         typedef xml_node<Ch> *reference;
         typedef xml_node<Ch> *pointer;
@@ -34,7 +33,7 @@ namespace rapidxml
         {
         }
 
-        reference operator *() const
+        reference operator*() const
         {
             assert(m_node);
             return m_node;
@@ -46,7 +45,7 @@ namespace rapidxml
             return m_node;
         }
 
-        node_iterator& operator++()
+        node_iterator &operator++()
         {
             assert(m_node);
             m_node = m_node->next_sibling();
@@ -60,7 +59,7 @@ namespace rapidxml
             return tmp;
         }
 
-        node_iterator& operator--()
+        node_iterator &operator--()
         {
             assert(m_node && m_node->previous_sibling());
             m_node = m_node->previous_sibling();
@@ -74,20 +73,18 @@ namespace rapidxml
             return tmp;
         }
 
-        bool operator ==(const node_iterator<Ch> &rhs)
+        bool operator==(const node_iterator<Ch> &rhs)
         {
             return m_node == rhs.m_node;
         }
 
-        bool operator !=(const node_iterator<Ch> &rhs)
+        bool operator!=(const node_iterator<Ch> &rhs)
         {
             return m_node != rhs.m_node;
         }
 
     private:
-
         xml_node<Ch> *m_node;
-
     };
 
     //! Iterator of child attributes of xml_node
@@ -96,7 +93,6 @@ namespace rapidxml
     {
 
     public:
-
         typedef xml_attribute<Ch> *value_type;
         typedef xml_attribute<Ch> *reference;
         typedef xml_attribute<Ch> *pointer;
@@ -113,7 +109,7 @@ namespace rapidxml
         {
         }
 
-        reference operator *() const
+        reference operator*() const
         {
             assert(m_attribute);
             return m_attribute;
@@ -125,7 +121,7 @@ namespace rapidxml
             return m_attribute;
         }
 
-        attribute_iterator& operator++()
+        attribute_iterator &operator++()
         {
             assert(m_attribute);
             m_attribute = m_attribute->next_attribute();
@@ -139,7 +135,7 @@ namespace rapidxml
             return tmp;
         }
 
-        attribute_iterator& operator--()
+        attribute_iterator &operator--()
         {
             assert(m_attribute && m_attribute->previous_attribute());
             m_attribute = m_attribute->previous_attribute();
@@ -153,20 +149,18 @@ namespace rapidxml
             return tmp;
         }
 
-        bool operator ==(const attribute_iterator<Ch> &rhs)
+        bool operator==(const attribute_iterator<Ch> &rhs)
         {
             return m_attribute == rhs.m_attribute;
         }
 
-        bool operator !=(const attribute_iterator<Ch> &rhs)
+        bool operator!=(const attribute_iterator<Ch> &rhs)
         {
             return m_attribute != rhs.m_attribute;
         }
 
     private:
-
         xml_attribute<Ch> *m_attribute;
-
     };
 
     //! \cond internal
@@ -174,18 +168,20 @@ namespace rapidxml
     {
         // Range support for children of xml_node.
 
-        struct node_end { };
+        struct node_end
+        {
+        };
 
         template<class Ch>
         struct node_begin
         {
 
-            bool operator !=(node_end) const noexcept
+            bool operator!=(node_end) const noexcept
             {
                 return m_child;
             }
 
-            auto operator *() const noexcept
+            auto operator*() const noexcept
             {
                 return m_child;
             }
@@ -197,7 +193,6 @@ namespace rapidxml
 
             xml_node<Ch> *m_child;
             std::basic_string_view<Ch> m_name;
-
         };
 
         template<class Ch>
@@ -206,25 +201,32 @@ namespace rapidxml
 
             node_begin<Ch> m_begin;
 
-            auto end() { return node_end{}; }
-            auto begin() { return m_begin; }
-
+            auto end()
+            {
+                return node_end{};
+            }
+            auto begin()
+            {
+                return m_begin;
+            }
         };
 
         // Range support for attributes of xml_node.
 
-        struct attribute_end { };
+        struct attribute_end
+        {
+        };
 
         template<class Ch>
         struct attribute_begin
         {
 
-            bool operator !=(attribute_end) const noexcept
+            bool operator!=(attribute_end) const noexcept
             {
                 return m_attribute;
             }
 
-            auto operator *() const noexcept
+            auto operator*() const noexcept
             {
                 return m_attribute;
             }
@@ -236,7 +238,6 @@ namespace rapidxml
 
             xml_attribute<Ch> *m_attribute;
             std::basic_string_view<Ch> m_name;
-
         };
 
         template<class Ch>
@@ -245,11 +246,15 @@ namespace rapidxml
 
             attribute_begin<Ch> m_begin;
 
-            auto end() { return attribute_end{}; }
-            auto begin() { return m_begin; }
-
+            auto end()
+            {
+                return attribute_end{};
+            }
+            auto begin()
+            {
+                return m_begin;
+            }
         };
-
     }
     //! \endcond
 
@@ -261,7 +266,7 @@ namespace rapidxml
     template<class Ch>
     auto node_range(const xml_node<Ch> *parent, std::basic_string_view<Ch> name = {}) noexcept
     {
-        return internal::node_range<Ch>{{parent->first_node(),name}};
+        return internal::node_range<Ch>{{parent->first_node(), name}};
     }
 
     //! \pre `node` is not equal to `nullptr`.
@@ -272,9 +277,8 @@ namespace rapidxml
     template<class Ch>
     auto attribute_range(const xml_node<Ch> *node, std::basic_string_view<Ch> name = {}) noexcept
     {
-        return internal::attribute_range<Ch>{{node->first_attribute(),name}};
+        return internal::attribute_range<Ch>{{node->first_attribute(), name}};
     }
-
 }
 
 #endif

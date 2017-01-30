@@ -8,9 +8,9 @@
 
 // If standard library is disabled, user must provide implementations of required functions and typedefs
 #if !defined(RAPIDXML_NO_STDLIB)
-    #include <cstdlib>      // For std::size_t
-    #include <cassert>      // For assert
-    #include <new>          // For placement new
+#include <cassert>   // For assert
+#include <cstdlib>   // For std::size_t
+#include <new>       // For placement new
 #endif
 
 //! \cond
@@ -27,8 +27,8 @@
 // On MSVC, disable "conditional expression is constant" warning (level 4).
 // This warning is almost impossible to avoid with certain types of templated code
 #ifdef _MSC_VER
-    #pragma warning(push)
-    #pragma warning(disable:4127)   // Conditional expression is constant
+#pragma warning(push)
+#pragma warning(disable : 4127)   // Conditional expression is constant
 #endif
 
 ///////////////////////////////////////////////////////////////////////////
@@ -36,7 +36,11 @@
 
 #if defined(RAPIDXML_NO_EXCEPTIONS)
 
-#define RAPIDXML_PARSE_ERROR(what, where) { parse_error_handler(what, where); assert(0); }
+#define RAPIDXML_PARSE_ERROR(what, where) \
+    {                                     \
+        parse_error_handler(what, where); \
+        assert(0);                        \
+    }
 
 namespace rapidxml
 {
@@ -61,7 +65,7 @@ namespace rapidxml
 
 #else
 
-#include <exception>    // For std::exception
+#include <exception>   // For std::exception
 
 #define RAPIDXML_PARSE_ERROR(what, where) throw parse_error(what, where)
 
@@ -79,11 +83,10 @@ namespace rapidxml
     //! This function must be defined by the user.
     //! <br><br>
     //! This class derives from <code>std::exception</code> class.
-    class parse_error: public std::exception
+    class parse_error : public std::exception
     {
 
     public:
-
         //! Constructs parse error
         parse_error(const char *what, void *where)
             : m_what(what)
@@ -108,10 +111,8 @@ namespace rapidxml
         }
 
     private:
-
         const char *m_what;
         void *m_where;
-
     };
 }
 
@@ -121,55 +122,61 @@ namespace rapidxml
 // Pool sizes
 
 #ifndef RAPIDXML_STATIC_POOL_SIZE
-    // Size of static memory block of memory_pool.
-    // Define RAPIDXML_STATIC_POOL_SIZE before including rapidxml.hpp if you want to override the default value.
-    // No dynamic memory allocations are performed by memory_pool until static memory is exhausted.
-    #define RAPIDXML_STATIC_POOL_SIZE (64 * 1024)
+// Size of static memory block of memory_pool.
+// Define RAPIDXML_STATIC_POOL_SIZE before including rapidxml.hpp if you want to override the default value.
+// No dynamic memory allocations are performed by memory_pool until static memory is exhausted.
+#define RAPIDXML_STATIC_POOL_SIZE (64 * 1024)
 #endif
 
 #ifndef RAPIDXML_DYNAMIC_POOL_SIZE
-    // Size of dynamic memory block of memory_pool.
-    // Define RAPIDXML_DYNAMIC_POOL_SIZE before including rapidxml.hpp if you want to override the default value.
-    // After the static block is exhausted, dynamic blocks with approximately this size are allocated by memory_pool.
-    #define RAPIDXML_DYNAMIC_POOL_SIZE (64 * 1024)
+// Size of dynamic memory block of memory_pool.
+// Define RAPIDXML_DYNAMIC_POOL_SIZE before including rapidxml.hpp if you want to override the default value.
+// After the static block is exhausted, dynamic blocks with approximately this size are allocated by memory_pool.
+#define RAPIDXML_DYNAMIC_POOL_SIZE (64 * 1024)
 #endif
 
 #ifndef RAPIDXML_ALIGNMENT
-    // Memory allocation alignment.
-    // Define RAPIDXML_ALIGNMENT before including rapidxml.hpp if you want to override the default value, which is the size of pointer.
-    // All memory allocations for nodes, attributes and strings will be aligned to this value.
-    // This must be a power of 2 and at least 1, otherwise memory_pool will not work.
-    #define RAPIDXML_ALIGNMENT sizeof(void *)
+// Memory allocation alignment.
+// Define RAPIDXML_ALIGNMENT before including rapidxml.hpp if you want to override the default value, which is the size of pointer.
+// All memory allocations for nodes, attributes and strings will be aligned to this value.
+// This must be a power of 2 and at least 1, otherwise memory_pool will not work.
+#define RAPIDXML_ALIGNMENT sizeof(void *)
 #endif
 
 namespace rapidxml
 {
     // Forward declarations
-    template<class Ch> class xml_node;
-    template<class Ch> class xml_attribute;
-    template<class Ch> class xml_document;
+    template<class Ch>
+    class xml_node;
+    template<class Ch>
+    class xml_attribute;
+    template<class Ch>
+    class xml_document;
 
     //! Policy type for case sensitivity in comparisons.
     class case_sensitivity
     {
 
-    //! \cond internal
+        //! \cond internal
     public:
-
-        struct True { };
-        struct False { };
+        struct True
+        {
+        };
+        struct False
+        {
+        };
 
         explicit constexpr case_sensitivity(True) noexcept
-          : value{true}
+            : value{true}
         {
         }
 
         explicit constexpr case_sensitivity(False) noexcept
-          : value{false}
+            : value{false}
         {
         }
 
-        template <class T, class = std::enable_if_t<std::is_same_v<T,bool>>>
+        template<class T, class = std::enable_if_t<std::is_same_v<T, bool>>>
         constexpr operator T() const noexcept
         {
             return value;
@@ -178,15 +185,15 @@ namespace rapidxml
     private:
         bool value;
 
-    //! \endcond
+        //! \endcond
     };
 
     //! Can be used in place of and is equivalent to a <code>true case_sensitive</code> argument.
     //!
-    constexpr case_sensitivity case_sensitive {case_sensitivity::True{}};
+    constexpr case_sensitivity case_sensitive{case_sensitivity::True{}};
     //! Can be used in place of and is equivalent to a <code>false case_sensitive</code> argument.
     //!
-    constexpr case_sensitivity non_case_sensitive {case_sensitivity::False{}};
+    constexpr case_sensitivity non_case_sensitive{case_sensitivity::False{}};
 
     //! Enumeration listing all node types produced by the parser.
     //! Use xml_node::type() function to query node type.
@@ -430,10 +437,9 @@ namespace rapidxml
     {
 
     public:
-
         //! \cond internal
-        typedef void *(alloc_func)(std::size_t);       // Type of user-defined function used to allocate memory
-        typedef void (free_func)(void *);              // Type of user-defined function used to free memory
+        typedef void *(alloc_func)(std::size_t);   // Type of user-defined function used to allocate memory
+        typedef void(free_func)(void *);           // Type of user-defined function used to free memory
         //! \endcond
 
         //! Constructs empty pool with default allocator functions.
@@ -467,7 +473,7 @@ namespace rapidxml
                                     std::size_t name_size = 0, std::size_t value_size = 0)
         {
             void *memory = allocate_aligned(sizeof(xml_node<Ch>));
-            xml_node<Ch> *node = new(memory) xml_node<Ch>(type);
+            xml_node<Ch> *node = new (memory) xml_node<Ch>(type);
             if (name)
             {
                 if (name_size > 0)
@@ -488,7 +494,7 @@ namespace rapidxml
         //! \return `allocate_node(type,name.empty() ? nullptr : name.data(),value.empty() ? nullptr : value.data(),name.size(),value.size())`
         xml_node<Ch> *allocate_node(node_type type, std::basic_string_view<Ch> name, std::basic_string_view<Ch> value = {})
         {
-            return allocate_node(type,name.empty() ? nullptr : name.data(),value.empty() ? nullptr : value.data(),name.size(),value.size());
+            return allocate_node(type, name.empty() ? nullptr : name.data(), value.empty() ? nullptr : value.data(), name.size(), value.size());
         }
 
         //! Allocates a new attribute from the pool, and optionally assigns name and value to it.
@@ -504,7 +510,7 @@ namespace rapidxml
                                               std::size_t name_size = 0, std::size_t value_size = 0)
         {
             void *memory = allocate_aligned(sizeof(xml_attribute<Ch>));
-            xml_attribute<Ch> *attribute = new(memory) xml_attribute<Ch>;
+            xml_attribute<Ch> *attribute = new (memory) xml_attribute<Ch>;
             if (name)
             {
                 if (name_size > 0)
@@ -525,7 +531,7 @@ namespace rapidxml
         //! \return `allocate_attribute(name.empty() ? nullptr : name.data(),value.empty() ? nullptr : value.data(),name.size(),value.size())`
         xml_attribute<Ch> *allocate_attribute(std::basic_string_view<Ch> name, std::basic_string_view<Ch> value = {})
         {
-            return allocate_attribute(name.empty() ? nullptr : name.data(),value.empty() ? nullptr : value.data(),name.size(),value.size());
+            return allocate_attribute(name.empty() ? nullptr : name.data(), value.empty() ? nullptr : value.data(), name.size(), value.size());
         }
 
         //! Allocates a char array of given size from the pool, and optionally copies a given string to it.
@@ -537,7 +543,7 @@ namespace rapidxml
         //! \return Pointer to allocated char array. This pointer will never be NULL.
         Ch *allocate_string(const Ch *source, std::size_t size = 0)
         {
-            assert(source || size);     // Either source or size (or both) must be specified
+            assert(source || size);   // Either source or size (or both) must be specified
             if (size == 0)
                 size = internal::measure(source) + 1;
             Ch *result = static_cast<Ch *>(allocate_aligned(size * sizeof(Ch)));
@@ -551,7 +557,7 @@ namespace rapidxml
         //! \return `{allocate_string(source.empty() ? nullptr : source.data(),source.size()),source.size()}`
         jegp::Basic_string_view<Ch> allocate_string(std::basic_string_view<Ch> source)
         {
-            return {allocate_string(source.empty() ? nullptr : source.data(),source.size()),source.size()};
+            return {allocate_string(source.empty() ? nullptr : source.data(), source.size()), source.size()};
         }
 
         //! Clones an xml_node and its hierarchy of child nodes and attributes.
@@ -620,13 +626,12 @@ namespace rapidxml
         //! \param ff Free function, or 0 to restore default function
         void set_allocator(alloc_func *af, free_func *ff)
         {
-            assert(m_begin == m_static_memory && m_ptr == align(m_begin));    // Verify that no memory is allocated yet
+            assert(m_begin == m_static_memory && m_ptr == align(m_begin));   // Verify that no memory is allocated yet
             m_alloc_func = af;
             m_free_func = ff;
         }
 
     private:
-
         struct header
         {
             char *previous_begin;
@@ -652,13 +657,13 @@ namespace rapidxml
             if (m_alloc_func)   // Allocate memory using either user-specified allocation function or global operator new[]
             {
                 memory = m_alloc_func(size);
-                assert(memory); // Allocator is not allowed to return 0, on failure it must either throw, stop the program or use longjmp
+                assert(memory);   // Allocator is not allowed to return 0, on failure it must either throw, stop the program or use longjmp
             }
             else
             {
                 memory = new char[size];
 #ifdef RAPIDXML_NO_EXCEPTIONS
-                if (!memory)            // If exceptions are disabled, verify memory allocation, because new will not be able to throw bad_alloc
+                if (!memory)   // If exceptions are disabled, verify memory allocation, because new will not be able to throw bad_alloc
                     RAPIDXML_PARSE_ERROR("out of memory", 0);
 #endif
             }
@@ -679,7 +684,7 @@ namespace rapidxml
                     pool_size = size;
 
                 // Allocate
-                std::size_t alloc_size = sizeof(header) + (2 * RAPIDXML_ALIGNMENT - 2) + pool_size;     // 2 alignments required in worst case: one for header, one for actual allocation
+                std::size_t alloc_size = sizeof(header) + (2 * RAPIDXML_ALIGNMENT - 2) + pool_size;   // 2 alignments required in worst case: one for header, one for actual allocation
                 char *raw_memory = allocate_raw(alloc_size);
 
                 // Setup new pool in allocated memory
@@ -699,12 +704,12 @@ namespace rapidxml
             return result;
         }
 
-        char *m_begin;                                      // Start of raw memory making up current pool
-        char *m_ptr;                                        // First free byte in current pool
-        char *m_end;                                        // One past last available byte in current pool
-        char m_static_memory[RAPIDXML_STATIC_POOL_SIZE];    // Static raw memory
-        alloc_func *m_alloc_func;                           // Allocator function, or 0 if default is to be used
-        free_func *m_free_func;                             // Free function, or 0 if default is to be used
+        char *m_begin;                                     // Start of raw memory making up current pool
+        char *m_ptr;                                       // First free byte in current pool
+        char *m_end;                                       // One past last available byte in current pool
+        char m_static_memory[RAPIDXML_STATIC_POOL_SIZE];   // Static raw memory
+        alloc_func *m_alloc_func;                          // Allocator function, or 0 if default is to be used
+        free_func *m_free_func;                            // Free function, or 0 if default is to be used
     };
 
     ///////////////////////////////////////////////////////////////////////////
@@ -718,7 +723,6 @@ namespace rapidxml
     {
 
     public:
-
         ///////////////////////////////////////////////////////////////////////////
         // Construction & destruction
 
@@ -755,7 +759,7 @@ namespace rapidxml
         //! \return `{name(),name_size()}`
         jegp::Basic_string_view<Ch> name_view() const noexcept
         {
-            return {name(),name_size()};
+            return {name(), name_size()};
         }
 
         //! Gets value of node.
@@ -780,7 +784,7 @@ namespace rapidxml
         //! \return `{value(),value_size()}`
         jegp::Basic_string_view<Ch> value_view() const noexcept
         {
-            return {value(),value_size()};
+            return {value(), value_size()};
         }
 
         ///////////////////////////////////////////////////////////////////////////
@@ -809,7 +813,7 @@ namespace rapidxml
         //!
         void name(std::basic_string_view<Ch> name) noexcept
         {
-            this->name(name.data(),name.size());
+            this->name(name.data(), name.size());
         }
 
         //! Sets name of node to a zero-terminated string.
@@ -846,7 +850,7 @@ namespace rapidxml
         //!
         void value(std::basic_string_view<Ch> value) noexcept
         {
-            this->value(value.data(),value.size());
+            this->value(value.data(), value.size());
         }
 
         //! Sets value of node to a zero-terminated string.
@@ -868,7 +872,6 @@ namespace rapidxml
         }
 
     protected:
-
         // Return empty string
         static Ch *nullstr()
         {
@@ -876,12 +879,11 @@ namespace rapidxml
             return &zero;
         }
 
-        Ch *m_name;                         // Name of node, or 0 if no name
-        Ch *m_value;                        // Value of node, or 0 if no value
-        std::size_t m_name_size;            // Length of node name, or undefined of no name
-        std::size_t m_value_size;           // Length of node value, or undefined if no value
-        xml_node<Ch> *m_parent;             // Pointer to parent node, or 0 if none
-
+        Ch *m_name;                 // Name of node, or 0 if no name
+        Ch *m_value;                // Value of node, or 0 if no value
+        std::size_t m_name_size;    // Length of node name, or undefined of no name
+        std::size_t m_value_size;   // Length of node value, or undefined if no value
+        xml_node<Ch> *m_parent;     // Pointer to parent node, or 0 if none
     };
 
     //! Class representing attribute node of XML document.
@@ -890,13 +892,12 @@ namespace rapidxml
     //! Thus, this text must persist in memory for the lifetime of attribute.
     //! \param Ch Character type to use.
     template<class Ch = char>
-    class xml_attribute: public xml_base<Ch>
+    class xml_attribute : public xml_base<Ch>
     {
 
         friend class xml_node<Ch>;
 
     public:
-
         ///////////////////////////////////////////////////////////////////////////
         // Construction & destruction
 
@@ -946,7 +947,7 @@ namespace rapidxml
         //! \return `previous_attribute(name.empty() ? nullptr : name.data(),name.size(),cs)`
         xml_attribute<Ch> *previous_attribute(std::basic_string_view<Ch> name, case_sensitivity cs = case_sensitive) const noexcept
         {
-            return previous_attribute(name.empty() ? nullptr : name.data(),name.size(),cs);
+            return previous_attribute(name.empty() ? nullptr : name.data(), name.size(), cs);
         }
 
         //! Gets next attribute, optionally matching attribute name.
@@ -972,14 +973,12 @@ namespace rapidxml
         //! \return `next_attribute(name.empty() ? nullptr : name.data(),name.size(),cs)`
         xml_attribute<Ch> *next_attribute(std::basic_string_view<Ch> name, case_sensitivity cs = case_sensitive) const noexcept
         {
-            return next_attribute(name.empty() ? nullptr : name.data(),name.size(),cs);
+            return next_attribute(name.empty() ? nullptr : name.data(), name.size(), cs);
         }
 
     private:
-
-        xml_attribute<Ch> *m_prev_attribute;        // Pointer to previous sibling of attribute, or 0 if none; only valid if parent is non-zero
-        xml_attribute<Ch> *m_next_attribute;        // Pointer to next sibling of attribute, or 0 if none; only valid if parent is non-zero
-
+        xml_attribute<Ch> *m_prev_attribute;   // Pointer to previous sibling of attribute, or 0 if none; only valid if parent is non-zero
+        xml_attribute<Ch> *m_next_attribute;   // Pointer to next sibling of attribute, or 0 if none; only valid if parent is non-zero
     };
 
     ///////////////////////////////////////////////////////////////////////////
@@ -994,11 +993,10 @@ namespace rapidxml
     //! Thus, this text must persist in the memory for the lifetime of node.
     //! \param Ch Character type to use.
     template<class Ch = char>
-    class xml_node: public xml_base<Ch>
+    class xml_node : public xml_base<Ch>
     {
 
     public:
-
         ///////////////////////////////////////////////////////////////////////////
         // Construction & destruction
 
@@ -1058,7 +1056,7 @@ namespace rapidxml
         //! \return `first_node(name.empty() ? nullptr : name.data(),name.size(),cs)`
         xml_node<Ch> *first_node(std::basic_string_view<Ch> name, case_sensitivity cs = case_sensitive) const noexcept
         {
-            return first_node(name.empty() ? nullptr : name.data(),name.size(),cs);
+            return first_node(name.empty() ? nullptr : name.data(), name.size(), cs);
         }
 
         //! Gets last child node, optionally matching node name.
@@ -1070,7 +1068,7 @@ namespace rapidxml
         //! \return Pointer to found child, or 0 if not found.
         xml_node<Ch> *last_node(const Ch *name = 0, std::size_t name_size = 0, bool case_sensitive = true) const
         {
-            assert(m_first_node);  // Cannot query for last child if node has no children
+            assert(m_first_node);   // Cannot query for last child if node has no children
             if (name)
             {
                 if (name_size == 0)
@@ -1087,7 +1085,7 @@ namespace rapidxml
         //! \return `last_node(name.empty() ? nullptr : name.data(),name.size(),cs)`
         xml_node<Ch> *last_node(std::basic_string_view<Ch> name, case_sensitivity cs = case_sensitive) const noexcept
         {
-            return last_node(name.empty() ? nullptr : name.data(),name.size(),cs);
+            return last_node(name.empty() ? nullptr : name.data(), name.size(), cs);
         }
 
         //! Gets previous sibling node, optionally matching node name.
@@ -1099,7 +1097,7 @@ namespace rapidxml
         //! \return Pointer to found sibling, or 0 if not found.
         xml_node<Ch> *previous_sibling(const Ch *name = 0, std::size_t name_size = 0, bool case_sensitive = true) const
         {
-            assert(this->m_parent);     // Cannot query for siblings if node has no parent
+            assert(this->m_parent);   // Cannot query for siblings if node has no parent
             if (name)
             {
                 if (name_size == 0)
@@ -1116,7 +1114,7 @@ namespace rapidxml
         //! \return `previous_sibling(name.empty() ? nullptr : name.data(),name.size(),cs)`
         xml_node<Ch> *previous_sibling(std::basic_string_view<Ch> name, case_sensitivity cs = case_sensitive) const noexcept
         {
-            return previous_sibling(name.empty() ? nullptr : name.data(),name.size(),cs);
+            return previous_sibling(name.empty() ? nullptr : name.data(), name.size(), cs);
         }
 
         //! Gets next sibling node, optionally matching node name.
@@ -1128,7 +1126,7 @@ namespace rapidxml
         //! \return Pointer to found sibling, or 0 if not found.
         xml_node<Ch> *next_sibling(const Ch *name = 0, std::size_t name_size = 0, bool case_sensitive = true) const
         {
-            assert(this->m_parent);     // Cannot query for siblings if node has no parent
+            assert(this->m_parent);   // Cannot query for siblings if node has no parent
             if (name)
             {
                 if (name_size == 0)
@@ -1145,7 +1143,7 @@ namespace rapidxml
         //! \return `next_sibling(name.empty() ? nullptr : name.data(),name.size(),cs)`
         xml_node<Ch> *next_sibling(std::basic_string_view<Ch> name, case_sensitivity cs = case_sensitive) const noexcept
         {
-            return next_sibling(name.empty() ? nullptr : name.data(),name.size(),cs);
+            return next_sibling(name.empty() ? nullptr : name.data(), name.size(), cs);
         }
 
         //! Gets first attribute of node, optionally matching attribute name.
@@ -1171,7 +1169,7 @@ namespace rapidxml
         //! \return `first_attribute(name.empty() ? nullptr : name.data(),name.size(),cs)`
         xml_attribute<Ch> *first_attribute(std::basic_string_view<Ch> name, case_sensitivity cs = case_sensitive) const noexcept
         {
-            return first_attribute(name.empty() ? nullptr : name.data(),name.size(),cs);
+            return first_attribute(name.empty() ? nullptr : name.data(), name.size(), cs);
         }
 
         //! Gets last attribute of node, optionally matching attribute name.
@@ -1197,7 +1195,7 @@ namespace rapidxml
         //! \return `last_attribute(name.empty() ? nullptr : name.data(),name.size(),cs)`
         xml_attribute<Ch> *last_attribute(std::basic_string_view<Ch> name, case_sensitivity cs = case_sensitive) const noexcept
         {
-            return last_attribute(name.empty() ? nullptr : name.data(),name.size(),cs);
+            return last_attribute(name.empty() ? nullptr : name.data(), name.size(), cs);
         }
 
         ///////////////////////////////////////////////////////////////////////////
@@ -1457,13 +1455,12 @@ namespace rapidxml
         }
 
     private:
-
         ///////////////////////////////////////////////////////////////////////////
         // Restrictions
 
         // No copying
         xml_node(const xml_node &);
-        void operator =(const xml_node &);
+        void operator=(const xml_node &);
 
         ///////////////////////////////////////////////////////////////////////////
         // Data members
@@ -1484,7 +1481,6 @@ namespace rapidxml
         xml_attribute<Ch> *m_last_attribute;    // Pointer to last attribute of node, or 0 if none; this value is only valid if m_first_attribute is non-zero
         xml_node<Ch> *m_prev_sibling;           // Pointer to previous sibling of node, or 0 if none; this value is only valid if m_parent is non-zero
         xml_node<Ch> *m_next_sibling;           // Pointer to next sibling of node, or 0 if none; this value is only valid if m_parent is non-zero
-
     };
 
     ///////////////////////////////////////////////////////////////////////////
@@ -1498,11 +1494,10 @@ namespace rapidxml
     //! To access root node of the document, use the document itself, as if it was an xml_node.
     //! \param Ch Character type to use.
     template<class Ch = char>
-    class xml_document: public xml_node<Ch>, public memory_pool<Ch>
+    class xml_document : public xml_node<Ch>, public memory_pool<Ch>
     {
 
     public:
-
         //! Constructs empty XML document
         xml_document()
             : xml_node<Ch>(node_document)
@@ -1543,14 +1538,13 @@ namespace rapidxml
                 // Parse and append new child
                 if (*text == Ch('<'))
                 {
-                    ++text;     // Skip '<'
+                    ++text;   // Skip '<'
                     if (xml_node<Ch> *node = parse_node<Flags>(text))
                         this->append_node(node);
                 }
                 else
                     RAPIDXML_PARSE_ERROR("expected <", text);
             }
-
         }
 
         //! Equivalent to `parse<Flags>(const_cast<Ch*>(text))`.
@@ -1558,9 +1552,9 @@ namespace rapidxml
         template<int Flags>
         void parse(const Ch *text)
         {
-            static_assert((Flags & parse_non_destructive)==parse_non_destructive,
-                "Parsing a constant XML string requires setting the parse_non_destructive flag");
-            parse<Flags>(const_cast<Ch*>(text));
+            static_assert((Flags & parse_non_destructive) == parse_non_destructive,
+                          "Parsing a constant XML string requires setting the parse_non_destructive flag");
+            parse<Flags>(const_cast<Ch *>(text));
         }
 
         //! Clears the document by deleting all nodes and clearing the memory pool.
@@ -1573,7 +1567,6 @@ namespace rapidxml
         }
 
     private:
-
         ///////////////////////////////////////////////////////////////////////
         // Internal character utility functions
 
@@ -1641,7 +1634,7 @@ namespace rapidxml
                     return internal::lookup_tables<0>::lookup_attribute_data_1[static_cast<unsigned char>(ch)];
                 if (Quote == Ch('\"'))
                     return internal::lookup_tables<0>::lookup_attribute_data_2[static_cast<unsigned char>(ch)];
-                return 0;       // Should never be executed, to avoid warnings on Comeau
+                return 0;   // Should never be executed, to avoid warnings on Comeau
             }
         };
 
@@ -1655,7 +1648,7 @@ namespace rapidxml
                     return internal::lookup_tables<0>::lookup_attribute_data_1_pure[static_cast<unsigned char>(ch)];
                 if (Quote == Ch('\"'))
                     return internal::lookup_tables<0>::lookup_attribute_data_2_pure[static_cast<unsigned char>(ch)];
-                return 0;       // Should never be executed, to avoid warnings on Comeau
+                return 0;   // Should never be executed, to avoid warnings on Comeau
             }
         };
 
@@ -1673,33 +1666,39 @@ namespace rapidxml
             else
             {
                 // Insert UTF8 sequence
-                if (code < 0x80)    // 1 byte sequence
+                if (code < 0x80)   // 1 byte sequence
                 {
-	                text[0] = static_cast<unsigned char>(code);
+                    text[0] = static_cast<unsigned char>(code);
                     text += 1;
                 }
-                else if (code < 0x800)  // 2 byte sequence
+                else if (code < 0x800)   // 2 byte sequence
                 {
-	                text[1] = static_cast<unsigned char>((code | 0x80) & 0xBF); code >>= 6;
-	                text[0] = static_cast<unsigned char>(code | 0xC0);
+                    text[1] = static_cast<unsigned char>((code | 0x80) & 0xBF);
+                    code >>= 6;
+                    text[0] = static_cast<unsigned char>(code | 0xC0);
                     text += 2;
                 }
-	            else if (code < 0x10000)    // 3 byte sequence
+                else if (code < 0x10000)   // 3 byte sequence
                 {
-	                text[2] = static_cast<unsigned char>((code | 0x80) & 0xBF); code >>= 6;
-	                text[1] = static_cast<unsigned char>((code | 0x80) & 0xBF); code >>= 6;
-	                text[0] = static_cast<unsigned char>(code | 0xE0);
+                    text[2] = static_cast<unsigned char>((code | 0x80) & 0xBF);
+                    code >>= 6;
+                    text[1] = static_cast<unsigned char>((code | 0x80) & 0xBF);
+                    code >>= 6;
+                    text[0] = static_cast<unsigned char>(code | 0xE0);
                     text += 3;
                 }
-	            else if (code < 0x110000)   // 4 byte sequence
+                else if (code < 0x110000)   // 4 byte sequence
                 {
-	                text[3] = static_cast<unsigned char>((code | 0x80) & 0xBF); code >>= 6;
-	                text[2] = static_cast<unsigned char>((code | 0x80) & 0xBF); code >>= 6;
-	                text[1] = static_cast<unsigned char>((code | 0x80) & 0xBF); code >>= 6;
-	                text[0] = static_cast<unsigned char>(code | 0xF0);
+                    text[3] = static_cast<unsigned char>((code | 0x80) & 0xBF);
+                    code >>= 6;
+                    text[2] = static_cast<unsigned char>((code | 0x80) & 0xBF);
+                    code >>= 6;
+                    text[1] = static_cast<unsigned char>((code | 0x80) & 0xBF);
+                    code >>= 6;
+                    text[0] = static_cast<unsigned char>(code | 0xF0);
                     text += 4;
                 }
-                else    // Invalid, only codes up to 0x10FFFF are allowed in Unicode
+                else   // Invalid, only codes up to 0x10FFFF are allowed in Unicode
                 {
                     RAPIDXML_PARSE_ERROR("invalid numeric character entity", text);
                 }
@@ -1813,7 +1812,7 @@ namespace rapidxml
                                     code = code * 16 + digit;
                                     ++src;
                                 }
-                                insert_coded_character<Flags>(dest, code);    // Put character in output
+                                insert_coded_character<Flags>(dest, code);   // Put character in output
                             }
                             else
                             {
@@ -1827,7 +1826,7 @@ namespace rapidxml
                                     code = code * 10 + digit;
                                     ++src;
                                 }
-                                insert_coded_character<Flags>(dest, code);    // Put character in output
+                                insert_coded_character<Flags>(dest, code);   // Put character in output
                             }
                             if (*src == Ch(';'))
                                 ++src;
@@ -1839,7 +1838,6 @@ namespace rapidxml
                         default:
                             // Ignore, just copy '&' verbatim
                             break;
-
                         }
                     }
                 }
@@ -1850,8 +1848,9 @@ namespace rapidxml
                     // Test if condensing is needed
                     if (whitespace_pred::test(*src))
                     {
-                        *dest = Ch(' '); ++dest;    // Put single space in dest
-                        ++src;                      // Skip first whitespace char
+                        *dest = Ch(' ');
+                        ++dest;   // Put single space in dest
+                        ++src;    // Skip first whitespace char
                         // Skip remaining whitespace chars
                         while (whitespace_pred::test(*src))
                             ++src;
@@ -1861,13 +1860,11 @@ namespace rapidxml
 
                 // No replacement, only copy character
                 *dest++ = *src++;
-
             }
 
             // Return new end
             text = src;
             return dest;
-
         }
 
         ///////////////////////////////////////////////////////////////////////
@@ -1882,7 +1879,7 @@ namespace rapidxml
                 static_cast<unsigned char>(text[1]) == 0xBB &&
                 static_cast<unsigned char>(text[2]) == 0xBF)
             {
-                text += 3;      // Skup utf-8 bom
+                text += 3;   // Skup utf-8 bom
             }
         }
 
@@ -1900,7 +1897,7 @@ namespace rapidxml
                         RAPIDXML_PARSE_ERROR("unexpected end of data", text);
                     ++text;
                 }
-                text += 2;    // Skip '?>'
+                text += 2;   // Skip '?>'
                 return 0;
             }
 
@@ -1935,8 +1932,8 @@ namespace rapidxml
                         RAPIDXML_PARSE_ERROR("unexpected end of data", text);
                     ++text;
                 }
-                text += 3;     // Skip '-->'
-                return 0;      // Do not produce comment node
+                text += 3;   // Skip '-->'
+                return 0;    // Do not produce comment node
             }
 
             // Remember value start
@@ -1958,7 +1955,7 @@ namespace rapidxml
             if (!(Flags & parse_no_string_terminators))
                 *text = Ch('\0');
 
-            text += 3;     // Skip '-->'
+            text += 3;   // Skip '-->'
             return comment;
         }
 
@@ -1980,15 +1977,15 @@ namespace rapidxml
                 // This works for all W3C test files except for 2 most wicked
                 case Ch('['):
                 {
-                    ++text;     // Skip '['
+                    ++text;   // Skip '['
                     int depth = 1;
                     while (depth > 0)
                     {
                         switch (*text)
                         {
-                            case Ch('['): ++depth; break;
-                            case Ch(']'): --depth; break;
-                            case 0: RAPIDXML_PARSE_ERROR("unexpected end of data", text);
+                        case Ch('['): ++depth; break;
+                        case Ch(']'): --depth; break;
+                        case 0: RAPIDXML_PARSE_ERROR("unexpected end of data", text);
                         }
                         ++text;
                     }
@@ -2002,7 +1999,6 @@ namespace rapidxml
                 // Other character, skip it
                 default:
                     ++text;
-
                 }
             }
 
@@ -2017,15 +2013,14 @@ namespace rapidxml
                 if (!(Flags & parse_no_string_terminators))
                     *text = Ch('\0');
 
-                text += 1;      // skip '>'
+                text += 1;   // skip '>'
                 return doctype;
             }
             else
             {
-                text += 1;      // skip '>'
+                text += 1;   // skip '>'
                 return 0;
             }
-
         }
 
         // Parse PI
@@ -2069,7 +2064,7 @@ namespace rapidxml
                     pi->value()[pi->value_size()] = Ch('\0');
                 }
 
-                text += 2;                          // Skip '?>'
+                text += 2;   // Skip '?>'
                 return pi;
             }
             else
@@ -2081,7 +2076,7 @@ namespace rapidxml
                         RAPIDXML_PARSE_ERROR("unexpected end of data", text);
                     ++text;
                 }
-                text += 2;    // Skip '?>'
+                text += 2;   // Skip '?>'
                 return 0;
             }
         }
@@ -2139,7 +2134,7 @@ namespace rapidxml
             {
                 Ch ch = *text;
                 *end = Ch('\0');
-                return ch;      // Return character that ends data; this is required because zero terminator overwritten it
+                return ch;   // Return character that ends data; this is required because zero terminator overwritten it
             }
 
             // Return character that ends data
@@ -2160,8 +2155,8 @@ namespace rapidxml
                         RAPIDXML_PARSE_ERROR("unexpected end of data", text);
                     ++text;
                 }
-                text += 3;      // Skip ]]>
-                return 0;       // Do not produce CDATA node
+                text += 3;   // Skip ]]>
+                return 0;    // Do not produce CDATA node
             }
 
             // Skip until end of cdata
@@ -2181,7 +2176,7 @@ namespace rapidxml
             if (!(Flags & parse_no_string_terminators))
                 *text = Ch('\0');
 
-            text += 3;      // Skip ]]>
+            text += 3;   // Skip ]]>
             return cdata;
         }
 
@@ -2244,14 +2239,14 @@ namespace rapidxml
 
             // <?...
             case Ch('?'):
-                ++text;     // Skip ?
+                ++text;   // Skip ?
                 if ((text[0] == Ch('x') || text[0] == Ch('X')) &&
                     (text[1] == Ch('m') || text[1] == Ch('M')) &&
                     (text[2] == Ch('l') || text[2] == Ch('L')) &&
                     whitespace_pred::test(text[3]))
                 {
                     // '<?xml ' - xml declaration
-                    text += 4;      // Skip 'xml '
+                    text += 4;   // Skip 'xml '
                     return parse_xml_declaration<Flags>(text);
                 }
                 else
@@ -2272,7 +2267,7 @@ namespace rapidxml
                     if (text[2] == Ch('-'))
                     {
                         // '<!--' - xml comment
-                        text += 3;     // Skip '!--'
+                        text += 3;   // Skip '!--'
                         return parse_comment<Flags>(text);
                     }
                     break;
@@ -2283,7 +2278,7 @@ namespace rapidxml
                         text[5] == Ch('T') && text[6] == Ch('A') && text[7] == Ch('['))
                     {
                         // '<![CDATA[' - cdata
-                        text += 8;     // Skip '![CDATA['
+                        text += 8;   // Skip '![CDATA['
                         return parse_cdata<Flags>(text);
                     }
                     break;
@@ -2295,14 +2290,14 @@ namespace rapidxml
                         whitespace_pred::test(text[8]))
                     {
                         // '<!DOCTYPE ' - doctype
-                        text += 9;      // skip '!DOCTYPE '
+                        text += 9;   // skip '!DOCTYPE '
                         return parse_doctype<Flags>(text);
                     }
 
                 }   // switch
 
                 // Attempt to skip other, unrecognized node types starting with <!
-                ++text;     // Skip !
+                ++text;   // Skip !
                 while (*text != Ch('>'))
                 {
                     if (*text == 0)
@@ -2311,7 +2306,6 @@ namespace rapidxml
                 }
                 ++text;     // Skip '>'
                 return 0;   // No node recognized
-
             }
         }
 
@@ -2323,7 +2317,7 @@ namespace rapidxml
             while (1)
             {
                 // Skip whitespace between > and node contents
-                Ch *contents_start = text;      // Store start of node contents before whitespace is skipped
+                Ch *contents_start = text;   // Store start of node contents before whitespace is skipped
                 skip<whitespace_pred, Flags>(text);
                 Ch next_char = *text;
 
@@ -2342,7 +2336,7 @@ namespace rapidxml
                     if (text[1] == Ch('/'))
                     {
                         // Node closing
-                        text += 2;      // Skip '</'
+                        text += 2;   // Skip '</'
                         if (Flags & parse_validate_closing_tags)
                         {
                             // Skip and validate closing tag name
@@ -2360,13 +2354,13 @@ namespace rapidxml
                         skip<whitespace_pred, Flags>(text);
                         if (*text != Ch('>'))
                             RAPIDXML_PARSE_ERROR("expected >", text);
-                        ++text;     // Skip '>'
-                        return;     // Node closed, finished parsing contents
+                        ++text;   // Skip '>'
+                        return;   // Node closed, finished parsing contents
                     }
                     else
                     {
                         // Child node
-                        ++text;     // Skip '<'
+                        ++text;   // Skip '<'
                         if (xml_node<Ch> *child = parse_node<Flags>(text))
                             node->append_node(child);
                     }
@@ -2380,7 +2374,6 @@ namespace rapidxml
                 default:
                     next_char = parse_and_append_data<Flags>(node, text, contents_start);
                     goto after_data_node;   // Bypass regular processing after data nodes
-
                 }
             }
         }
@@ -2394,7 +2387,7 @@ namespace rapidxml
             {
                 // Extract attribute name
                 Ch *name = text;
-                ++text;     // Skip first character of attribute name
+                ++text;   // Skip first character of attribute name
                 skip<attribute_name_pred, Flags>(text);
                 if (text == name)
                     RAPIDXML_PARSE_ERROR("expected attribute name", name);
@@ -2439,7 +2432,7 @@ namespace rapidxml
                 // Make sure that end quote is present
                 if (*text != quote)
                     RAPIDXML_PARSE_ERROR("expected ' or \"", text);
-                ++text;     // Skip quote
+                ++text;   // Skip quote
 
                 // Add terminating zero after value
                 if (!(Flags & parse_no_string_terminators))
@@ -2449,7 +2442,6 @@ namespace rapidxml
                 skip<whitespace_pred, Flags>(text);
             }
         }
-
     };
 
     //! \cond internal
@@ -2737,7 +2729,6 @@ namespace rapidxml
         // clang-format on
     }
     //! \endcond
-
 }
 
 // Undefine internal macros
@@ -2745,7 +2736,7 @@ namespace rapidxml
 
 // On MSVC, restore warnings state
 #ifdef _MSC_VER
-    #pragma warning(pop)
+#pragma warning(pop)
 #endif
 
 #endif
