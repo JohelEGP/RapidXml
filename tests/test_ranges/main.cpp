@@ -26,15 +26,15 @@ int main()
     auto elem_value_it{values.begin()};
     auto attr_value_it{values.begin() + 2};
 
-    for (auto child : node_range(&doc))
+    for (auto &child : node_range(&doc))
     {
-        CHECK(*elem_name_it++ == child->name_ref());
-        CHECK(*elem_value_it++ == child->value_ref());
+        CHECK(*elem_name_it++ == child.name_ref());
+        CHECK(*elem_value_it++ == child.value_ref());
 
-        for (auto attr : attribute_range(child))
+        for (auto attr : attribute_range(&child))
         {
-            CHECK(*attr_name_it++ == attr->name_ref());
-            CHECK(*attr_value_it++ == attr->value_ref());
+            CHECK(*attr_name_it++ == attr.name_ref());
+            CHECK(*attr_value_it++ == attr.value_ref());
         }
     }
 
