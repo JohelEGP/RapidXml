@@ -28,7 +28,7 @@ namespace rapidxml
         {
         }
 
-        node_iterator(xml_node<Ch> *node)
+        node_iterator(const xml_node<Ch> *node)
             : m_node(node->first_node())
         {
         }
@@ -73,12 +73,12 @@ namespace rapidxml
             return tmp;
         }
 
-        bool operator==(const node_iterator<Ch> &rhs)
+        bool operator==(const node_iterator<Ch> &rhs) const
         {
             return m_node == rhs.m_node;
         }
 
-        bool operator!=(const node_iterator<Ch> &rhs)
+        bool operator!=(const node_iterator<Ch> &rhs) const
         {
             return m_node != rhs.m_node;
         }
@@ -104,7 +104,7 @@ namespace rapidxml
         {
         }
 
-        attribute_iterator(xml_node<Ch> *node)
+        attribute_iterator(const xml_node<Ch> *node)
             : m_attribute(node->first_attribute())
         {
         }
@@ -149,12 +149,12 @@ namespace rapidxml
             return tmp;
         }
 
-        bool operator==(const attribute_iterator<Ch> &rhs)
+        bool operator==(const attribute_iterator<Ch> &rhs) const
         {
             return m_attribute == rhs.m_attribute;
         }
 
-        bool operator!=(const attribute_iterator<Ch> &rhs)
+        bool operator!=(const attribute_iterator<Ch> &rhs) const
         {
             return m_attribute != rhs.m_attribute;
         }
