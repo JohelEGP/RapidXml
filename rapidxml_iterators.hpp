@@ -163,121 +163,55 @@ namespace rapidxml
         xml_attribute<Ch> *m_attribute;
     };
 
-    //! \cond internal
-    namespace internal
+    // Range-based for loop support
+    template<class Iterator>
+    class iterator_range
     {
-        // Range support for children of xml_node.
 
-        struct node_end
+    public:
+        using const_iterator = Iterator;
+        using iterator = Iterator;
+
+        iterator_range(Iterator first, Iterator last) noexcept
+            : m_first(first)
+            , m_last(last)
         {
-        };
+        }
 
-        template<class Ch>
-        struct node_begin
+        Iterator begin() const noexcept
         {
-
-            bool operator!=(node_end) const noexcept
-            {
-                return m_child;
-            }
-
-            auto operator*() const noexcept
-            {
-                return m_child;
-            }
-
-            void operator++() noexcept
-            {
-                m_child = m_child->next_sibling(m_name);
-            }
-
-            xml_node<Ch> *m_child;
-            std::basic_string_view<Ch> m_name;
-        };
-
-        template<class Ch>
-        struct node_range
+            return m_first;
+        }
+        Iterator end() const noexcept
         {
+            return m_last;
+        }
 
-            node_begin<Ch> m_begin;
+    private:
+        Iterator m_first;
+        Iterator m_last;
+    };
 
-            auto end()
-            {
-                return node_end{};
-            }
-            auto begin()
-            {
-                return m_begin;
-            }
-        };
+    template<class Ch>
+    using node_range = iterator_range<node_iterator<Ch>>;
 
-        // Range support for attributes of xml_node.
-
-        struct attribute_end
-        {
-        };
-
-        template<class Ch>
-        struct attribute_begin
-        {
-
-            bool operator!=(attribute_end) const noexcept
-            {
-                return m_attribute;
-            }
-
-            auto operator*() const noexcept
-            {
-                return m_attribute;
-            }
-
-            void operator++() noexcept
-            {
-                m_attribute = m_attribute->next_attribute(m_name);
-            }
-
-            xml_attribute<Ch> *m_attribute;
-            std::basic_string_view<Ch> m_name;
-        };
-
-        template<class Ch>
-        struct attribute_range
-        {
-
-            attribute_begin<Ch> m_begin;
-
-            auto end()
-            {
-                return attribute_end{};
-            }
-            auto begin()
-            {
-                return m_begin;
-            }
-        };
-    }
-    //! \endcond
+    template<class Ch>
+    using attribute_range = iterator_range<attribute_iterator<Ch>>;
 
     //! \pre `parent` is not equal to `nullptr`.
-    //! \return A range of pointers to the children of `parent`, optionally filtered by `name`.
-    //! \param name Name of the children in the range. If empty, they are not filtered.
-    //! \remarks The range offers minimal range-based for loop support.
-    //! \remarks It is unspecified wether this function has a defaulted `name` or is overloaded.
+    //! \return A range of pointers to the children of `parent`.
     template<class Ch>
-    auto node_range(const xml_node<Ch> *parent, std::basic_string_view<Ch> name = {}) noexcept
+    node_range<Ch> nodes(const xml_node<Ch> *parent) noexcept
     {
-        return internal::node_range<Ch>{{parent->first_node(), name}};
+        return {node_iterator<Ch>{parent}, {}};
     }
 
     //! \pre `node` is not equal to `nullptr`.
-    //! \return A range of pointers to the attributes of `node`, optionally filtered by `name`.
-    //! \param name Name of the attributes in the range. If empty, they are not filtered.
-    //! \remarks The range offers minimal range-based for loop support.
-    //! \remarks It is unspecified wether this function has a defaulted `name` or is overloaded.
+    //! \remarks The range offers range-based for loop support.
     template<class Ch>
-    auto attribute_range(const xml_node<Ch> *node, std::basic_string_view<Ch> name = {}) noexcept
+    attribute_range<Ch> attributes(const xml_node<Ch> *node) noexcept
     {
-        return internal::attribute_range<Ch>{{node->first_attribute(), name}};
+        return {attribute_iterator<Ch>{node}, {}};
     }
 }
 
