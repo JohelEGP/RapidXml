@@ -4,10 +4,30 @@ Project to improve and modernize the [RapidXml 1.13](http://rapidxml.sourceforge
 
 This project uses [Semantic Versioning 2.0.0](http://semver.org/).
 
-## Dependencies
+## Getting started
 
+### Dependencies
+
+* [GSL](https://github.com/Microsoft/GSL)
 * [jegp 3.0.0](https://github.com/johelegp/jegp)
-* C++17 range-based for loop if the range is a node or attribute range.
+
+### Installation
+
+RapidXml is header-only. It is enough to make the headers visible to your building process to start using the library.
+
+We support [CMake](https://cmake.org/). Just execute these commands from the root of the project:
+
+```
+cmake -E make_directory build
+cmake -E chdir build cmake ..
+```
+
+And optionally install the library (commands for linux):
+
+```
+cd build
+make install
+```
 
 ## Features
 
