@@ -4,7 +4,7 @@ project(RapidXml VERSION 5.0.0 LANGUAGES CXX)
 
 add_library(RapidXml INTERFACE)
 target_include_directories(RapidXml INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
     $<INSTALL_INTERFACE:include>
 )
 set_property(TARGET RapidXml APPEND PROPERTY
