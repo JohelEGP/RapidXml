@@ -11,6 +11,7 @@ set_property(TARGET RapidXml APPEND PROPERTY
     COMPATIBLE_INTERFACE_STRING RapidXml_VERSION_MAJOR)
 
 find_package(jegp 3.0.0 REQUIRED)
+target_link_libraries(RapidXml INTERFACE jegp)
 
 install(TARGETS RapidXml EXPORT RapidXmlConfig)
 install(FILES
