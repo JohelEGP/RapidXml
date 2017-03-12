@@ -13,7 +13,7 @@ set_property(TARGET RapidXml APPEND PROPERTY
 find_package(jegp 3.0.0 REQUIRED)
 target_link_libraries(RapidXml INTERFACE jegp)
 
-install(TARGETS RapidXml EXPORT RapidXmlConfig)
+install(TARGETS RapidXml EXPORT RapidXmlTargets)
 install(FILES
     rapidxml.hpp
     rapidxml_iterators.hpp
@@ -26,8 +26,14 @@ write_basic_package_version_file(RapidXmlConfigVersion.cmake
     VERSION ${RapidXml_VERSION}
     COMPATIBILITY SameMajorVersion)
 
-install(EXPORT RapidXmlConfig DESTINATION cmake)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/RapidXmlConfigVersion.cmake
-    DESTINATION cmake)
+export(EXPORT RapidXmlTargets FILE RapidXmlTargets.cmake)
+configure_file(RapidXmlConfig.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/RapidXmlConfig.cmake
+    COPYONLY)
 
-export(EXPORT RapidXmlConfig FILE RapidXmlConfig.cmake)
+install(EXPORT RapidXmlTargets DESTINATION cmake)
+install(
+    FILES
+        ${CMAKE_CURRENT_BINARY_DIR}/RapidXmlConfig.cmake
+        ${CMAKE_CURRENT_BINARY_DIR}/RapidXmlConfigVersion.cmake
+    DESTINATION cmake)
